@@ -152,6 +152,8 @@ a{color:inherit}
 @media (max-width:520px){.form{grid-template-columns:1fr}}
 .dlg footer{padding:12px 18px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line)}
 .dlg footer .sp{flex:1}
+.dlg.rel{width:min(860px,100%)}
+#relTxt{min-height:min(60vh,520px);font-family:var(--f-mono);font-size:12.5px;line-height:1.5;white-space:pre-wrap;overflow:auto;background:var(--sunk)}
 .audit{padding:0 18px 10px;font-size:12px;color:var(--muted)}
 
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:9px 14px;border-radius:8px;z-index:30;font-size:13px;max-width:calc(100vw - 32px)}
@@ -168,10 +170,8 @@ a{color:inherit}
     </div>
     <div class="row2">
       <label class="who" for="nome">Seu nome <input id="nome" type="text" placeholder="para o histórico" autocomplete="name"></label>
-      <button class="btn" id="btnExport" type="button" title="Baixar uma cópia dos dados">Exportar</button>
-      <button class="btn" id="btnImport" type="button" title="Carregar dados de um arquivo exportado">Importar</button>
-      <input type="file" id="fileImport" accept="application/json,.json" hidden>
       <span class="ro" id="ro" hidden>Somente leitura</span>
+      <button class="btn" id="btnRel" type="button">Relatório</button>
       <button class="btn primary" id="btnOrgao" type="button">+ Órgão</button>
       <button class="btn" id="btnServico" type="button">+ Serviço</button>
     </div>
@@ -348,6 +348,7 @@ document.addEventListener("click", e=>{
   if(t.dataset.addSv){openSv(null,t.dataset.addSv); return;}
   if(t.id==="btnOrgao"){openOrg(null); return;}
   if(t.id==="btnServico"){openSv(null,null); return;}
+  if(t.id==="btnRel"){openRel(); return;}
   if(t.dataset.sv && t.classList.contains("card")){openSv(t.dataset.sv); return;}
 });
 document.addEventListener("keydown", e=>{
@@ -371,6 +372,55 @@ document.addEventListener("drop", e=>{const c=e.target.closest&&e.target.closest
 
 /* Janelas */
 function closeModal(){$("#modal").innerHTML="";}
+
+/* Relatório em texto */
+function reportText(){
+  const vis=visible(), d=new Date();
+  const L=[], sep="─".repeat(56);
+  const tot=vis.reduce((a,v)=>a+v.svs.length,0);
+  const est=vis.filter(v=>v.o.esfera==="estadual").length;
+  const etq=i=>(i<LAST?(i+1)+". ":"✓ ")+ETAPAS[i];
+  const filtros=[UI.esf==="todos"?"todos os órgãos":(UI.esf==="estadual"?"só estaduais":"só federais")]; if(UI.q.trim()) filtros.push(`busca "${UI.q.trim()}"`);
+  L.push("RELATÓRIO DE REDIRECIONAMENTOS – ba.gov.br");
+  L.push(`Gerado em ${d.toLocaleDateString("pt-BR")} às ${d.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})} · ${filtros.join(" · ")}`);
+  L.push("", "RESUMO", sep);
+  L.push(`${tot} serviço${tot===1?"":"s"} em ${vis.length} órgão${vis.length===1?"":"s"} (${est} estadua${est===1?"l":"is"}, ${vis.length-est} federa${vis.length-est===1?"l":"is"})`);
+  ETAPAS.forEach((t,i)=>{const n=vis.reduce((a,v)=>a+v.svs.filter(s=>(s.etapa|0)===i).length,0); L.push(`  ${etq(i)}: ${n}${tot?` (${Math.round(n/tot*100)}%)`:""}`);});
+  const semSv=vis.filter(v=>!v.svs.length).map(v=>v.o.sigla||v.o.nome);
+  if(semSv.length) L.push(`  Órgãos ainda sem serviço cadastrado: ${semSv.length} (${semSv.join(", ")})`);
+  L.push("", "POR ÓRGÃO", sep);
+  for(const {o,svs} of vis){
+    L.push(`${o.sigla||o.nome}${o.sigla&&o.nome?" – "+o.nome:""} (${ESF[o.esfera]||""})`);
+    if(o.link) L.push(`  Site: ${href(o.link)}`);
+    if(!svs.length) L.push("  Nenhum serviço cadastrado.");
+    for(const s of svs){
+      const ex=[]; if(s.redmine)ex.push("Redmine #"+s.redmine); if(s.idServico)ex.push("ID serviço "+s.idServico); if(s.idEtapa)ex.push("ID etapa "+s.idEtapa); if(s.responsavel)ex.push("resp. "+s.responsavel);
+      L.push(`  • ${s.nome} → ${etq(s.etapa|0)}${ex.length?"  ["+ex.join(" · ")+"]":""}`);
+      if(s.linkBa) L.push(`      ba.gov.br: ${href(s.linkBa)}`);
+      if(s.link) L.push(`      origem: ${href(s.link)}`);
+      if(s.obs) L.push(`      obs.: ${s.obs.replace(/\s+/g," ")}`);
+    }
+    L.push("");
+  }
+  L.push("POR ETAPA", sep);
+  ETAPAS.forEach((t,i)=>{
+    const it=[]; vis.forEach(v=>v.svs.forEach(s=>{if((s.etapa|0)===i) it.push(`  • ${s.nome} (${v.o.sigla||v.o.nome})`);}));
+    L.push(`${etq(i)} – ${it.length}`); L.push(...(it.length?it:["  —"])); L.push("");
+  });
+  return L.join("\n").trim()+"\n";
+}
+function openRel(){
+  const txt=reportText();
+  $("#modal").innerHTML=`<div class="ov" id="ov"><div class="dlg rel" role="dialog" aria-labelledby="relT">
+    <header><h2 id="relT">Relatório do painel</h2><p>Situação atual de cada serviço, por órgão e por etapa. Respeita os filtros aplicados.</p></header>
+    <div class="form"><div class="f full"><label for="relTxt">Texto</label><textarea id="relTxt" readonly spellcheck="false">${esc(txt)}</textarea></div></div>
+    <footer><span class="sp"></span><button class="btn" type="button" id="relClose">Fechar</button><button class="btn" type="button" id="relTxtBtn" hidden>Baixar .txt</button><button class="btn primary" type="button" id="relCopy">Copiar texto</button></footer>
+  </div></div>`;
+  $("#ov").addEventListener("mousedown",e=>{if(e.target.id==="ov")closeModal();});
+  $("#relClose").onclick=closeModal;
+  $("#relCopy").onclick=async()=>{const ta=$("#relTxt"); try{await navigator.clipboard.writeText(ta.value); toast("Relatório copiado.");}catch(e){ta.focus(); ta.select(); toast("Selecionei o texto: use Ctrl+C para copiar.");}};
+  if(!window.claude){ const b=$("#relTxtBtn"); b.hidden=false; b.onclick=()=>{const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain;charset=utf-8"})); a.download="relatorio-redirecionamentos-"+new Date().toISOString().slice(0,10)+".txt"; document.body.appendChild(a); a.click(); a.remove();}; }
+}
 async function auditLine(doc){
   if(!doc||!doc.atualizadoEm) return "";
   let quem="";
@@ -681,22 +731,6 @@ async function firebaseDb(cfg){
 try{S.uid=localStorage.getItem("redir-nome")||null;}catch(e){}
 $("#nome").value=S.uid||"";
 $("#nome").addEventListener("change",e=>{S.uid=e.target.value.trim()||null; try{localStorage.setItem("redir-nome",S.uid||"");}catch(x){}});
-
-/* Exportar / Importar */
-$("#btnExport").onclick=()=>{
-  const out={exportadoEm:new Date().toISOString(),versao:2,orgaos:{},servicos:{}};
-  S.orgaos.forEach((v,k)=>{const {id,...d}=v; out.orgaos[k]=d;});
-  S.servicos.forEach((v,k)=>{const {id,...d}=v; out.servicos[k]=d;});
-  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:"application/json"}));
-  a.download="redirecionamentos-"+new Date().toISOString().slice(0,10)+".json"; document.body.appendChild(a); a.click(); a.remove();
-};
-$("#btnImport").onclick=()=>$("#fileImport").click();
-$("#fileImport").onchange=async e=>{
-  const f=e.target.files[0]; e.target.value=""; if(!f||!S.db) return;
-  try{const d=JSON.parse(await f.text()); if(!d.orgaos) throw 0;
-    if(!d.versao) Object.values(d.servicos||{}).forEach(x=>{ if(x.atualizadoEm) x.etapa=(x.etapa|0)+1; }); await S.db.replaceAll(d); toast("Dados importados.");}
-  catch(x){toast("Arquivo inválido. Use um arquivo gerado pelo botão Exportar.");}
-};
 
 render();
 (async()=>{
