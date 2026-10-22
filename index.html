@@ -148,6 +148,12 @@ a{color:inherit}
 .f label{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
 .f input,.f select,.f textarea{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}
 .f textarea{min-height:70px;resize:vertical}
+.dt{position:relative;display:flex}
+.dt input[type=text]{flex:1;padding-right:40px}
+.dt .cal{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:30px;display:grid;place-items:center;color:var(--muted);border-radius:6px;pointer-events:none}
+.dt input[type=date]{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:30px;padding:0;border:0;opacity:0;cursor:pointer}
+.dt input[type=date]::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:auto;height:auto;cursor:pointer}
+.dt:hover .cal{color:var(--accent);background:var(--accent-soft)}
 .f .hint{font-size:11.5px;color:var(--muted)}
 @media (max-width:520px){.form{grid-template-columns:1fr}}
 .dlg footer{padding:12px 18px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line)}
@@ -311,6 +317,8 @@ function card(s,showOrg){
   if(s.idServico) meta.push(`<span class="chip" title="ID do serviço">serv ${esc(s.idServico)}</span>`);
   if(s.idEtapa) meta.push(`<span class="chip" title="ID da etapa">etapa ${esc(s.idEtapa)}</span>`);
   if(s.redmine) meta.push(`<span class="chip" title="Chamado no Redmine">#${esc(s.redmine)}</span>`);
+  if(s.dataConclusao) meta.push(`<span class="chip" title="Data de conclusão">concluído ${esc(s.dataConclusao)}</span>`);
+  else if(s.previsaoSubida) meta.push(`<span class="chip" title="Previsão de subida no ba.gov.br">prev. ${esc(s.previsaoSubida)}</span>`);
   return `<div class="card" draggable="true" data-sv="${s.id}" style="${ec(e)}" tabindex="0" role="button" aria-label="${esc(s.nome)}, etapa: ${esc(ETAPAS[e])}">
     <div class="stg">${num(e)} · ${esc(ETAPAS[e])}</div>
     <div class="nm">${esc(s.nome)}</div>
@@ -331,10 +339,13 @@ function applyRO(){
 }
 
 /* Ações */
+function hoje(){return new Date().toLocaleDateString("pt-BR");}
+// ao chegar em "Em produção" sem data de conclusão, preenche com a data de hoje
+function autoConclusao(s,etapa){return etapa===LAST && !s.dataConclusao ? {dataConclusao:hoje()} : {};}
 function moveSv(id, etapa){
   const s=S.servicos.get(id); if(!s||!S.db) return;
   etapa=Math.max(0,Math.min(LAST,etapa)); if((s.etapa|0)===etapa) return;
-  write("servicos/"+id, ()=>S.db.doc("servicos/"+id).update({etapa, ...stamp()}));
+  write("servicos/"+id, ()=>S.db.doc("servicos/"+id).update({etapa, ...autoConclusao(s,etapa), ...stamp()}));
 }
 
 document.addEventListener("click", e=>{
@@ -366,7 +377,7 @@ document.addEventListener("dragover", e=>{const c=e.target.closest&&e.target.clo
 document.addEventListener("drop", e=>{const c=e.target.closest&&e.target.closest(".cell"); if(!c||!dragId)return; e.preventDefault(); const id=dragId;
   const s=S.servicos.get(id); const et=Number(c.dataset.cell);
   if(s && c.dataset.org && c.dataset.org!==s.orgaoId){ // soltou na raia de outro órgão
-    write("servicos/"+id, ()=>S.db.doc("servicos/"+id).update({etapa:et, orgaoId:c.dataset.org, ...stamp()}));
+    write("servicos/"+id, ()=>S.db.doc("servicos/"+id).update({etapa:et, orgaoId:c.dataset.org, ...autoConclusao(s,et), ...stamp()}));
   } else moveSv(id, et);
 });
 
@@ -398,6 +409,8 @@ function reportText(){
       L.push(`  • ${s.nome} → ${etq(s.etapa|0)}${ex.length?"  ["+ex.join(" · ")+"]":""}`);
       if(s.linkBa) L.push(`      ba.gov.br: ${href(s.linkBa)}`);
       if(s.link) L.push(`      origem: ${href(s.link)}`);
+      if(s.previsaoSubida) L.push(`      previsão de subida: ${s.previsaoSubida}`);
+      if(s.dataConclusao) L.push(`      concluído em: ${s.dataConclusao}`);
       if(s.obs) L.push(`      obs.: ${s.obs.replace(/\s+/g," ")}`);
     }
     L.push("");
@@ -469,6 +482,14 @@ function openOrg(id){
     closeModal(); toast(o?"Órgão atualizado.":"Órgão adicionado.");
   };
 }
+function dateField(id,label,val,hint){
+  return `<div class="f"><label for="${id}">${label}</label><div class="dt">
+    <input id="${id}" type="text" value="${esc(val)}" placeholder="dd/mm/aaaa ou ex.: dez/2026" autocomplete="off">
+    <span class="cal" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span>
+    <input type="date" data-for="${id}" aria-label="${label}: escolher no calendário" tabindex="-1">
+  </div><span class="hint">${hint}</span></div>`;
+}
+document.addEventListener("change",e=>{const d=e.target; if(d.type==="date"&&d.dataset.for&&d.value){const [y,m,dd]=d.value.split("-"); $("#"+d.dataset.for).value=`${dd}/${m}/${y}`;}});
 function openSv(id, orgId){
   const s=id?S.servicos.get(id):null;
   const orgs=orgList();
@@ -484,6 +505,8 @@ function openSv(id, orgId){
     <div class="f"><label for="s_ide">ID da etapa</label><input id="s_ide" value="${esc(s?.idEtapa)}"></div>
     <div class="f"><label for="s_red">Nº do chamado no Redmine</label><input id="s_red" value="${esc(s?.redmine)}" inputmode="numeric"></div>
     <div class="f"><label for="s_resp">Responsável</label><input id="s_resp" value="${esc(s?.responsavel)}"></div>
+    ${dateField("s_prev","Previsão de subida",s?.previsaoSubida,"Previsão de entrar no ba.gov.br.")}
+    ${dateField("s_conc","Data de conclusão",s?.dataConclusao,"Preenchida sozinha ao ir para “Em produção”, se estiver vazia.")}
     <div class="f full"><label for="s_obs">Observações</label><textarea id="s_obs">${esc(s?.obs)}</textarea></div>`,
     !!s, "Excluir serviço");
   $("#s_org").value=oid; $("#s_et").value=String(s?.etapa|0);
@@ -491,8 +514,9 @@ function openSv(id, orgId){
   armDelete("Confirmar exclusão", ()=>{write("servicos/"+id,()=>S.db.doc("servicos/"+id).delete()); toast("Serviço excluído.");});
   $("#dlg").onsubmit=e=>{e.preventDefault();
     const data={nome:$("#s_nome").value.trim(), orgaoId:$("#s_org").value, etapa:Number($("#s_et").value), link:$("#s_link").value.trim(), linkBa:$("#s_linkba").value.trim(),
-      idServico:$("#s_ids").value.trim(), idEtapa:$("#s_ide").value.trim(), redmine:$("#s_red").value.trim().replace(/^#/,""), responsavel:$("#s_resp").value.trim(), obs:$("#s_obs").value.trim(), ...stamp()};
+      idServico:$("#s_ids").value.trim(), idEtapa:$("#s_ide").value.trim(), redmine:$("#s_red").value.trim().replace(/^#/,""), responsavel:$("#s_resp").value.trim(), previsaoSubida:$("#s_prev").value.trim(), dataConclusao:$("#s_conc").value.trim(), obs:$("#s_obs").value.trim(), ...stamp()};
     if(!data.nome){$("#s_nome").focus(); toast("Dê um nome ao serviço."); return;}
+    if(data.etapa===LAST && !data.dataConclusao) data.dataConclusao=hoje();
     if(s){ write("servicos/"+id,()=>S.db.doc("servicos/"+id).update(data)); }
     else { const ref=S.db.collection("servicos").doc(); data.ordem=999; write(ref.path,()=>ref.set(data)); UI.collapsed.delete(data.orgaoId); saveUI(); }
     closeModal(); toast(s?"Serviço atualizado.":"Serviço adicionado.");
@@ -515,9 +539,18 @@ const FIREBASE_CONFIG = {
 */
 const SEED = {
  "orgaos": {
-  "core-ba": {
+  "a-definir": {
    "esfera": "estadual",
-   "link": "https://www.core-ba.org.br",
+   "link": "",
+   "nome": "Serviços estaduais sem órgão definido",
+   "obs": "Mover cada serviço para o órgão correto (abra o serviço e troque o campo Órgão).",
+   "ordem": 99,
+   "sigla": "Órgão a definir"
+  },
+  "core-ba": {
+   "atualizadoEm": "2026-10-22T13:54:36.808Z",
+   "esfera": "estadual",
+   "link": "https://corebahia.org.br/",
    "nome": "Conselho Regional dos Representantes Comerciais no Estado da Bahia",
    "obs": "",
    "ordem": 8,
@@ -621,6 +654,22 @@ const SEED = {
    "ordem": 9,
    "sigla": "CRT-BA"
   },
+  "detran-ba": {
+   "esfera": "estadual",
+   "link": "https://www.detran.ba.gov.br",
+   "nome": "Departamento Estadual de Trânsito da Bahia",
+   "obs": "",
+   "ordem": 20,
+   "sigla": "DETRAN-BA"
+  },
+  "juceb": {
+   "esfera": "estadual",
+   "link": "https://www.juceb.ba.gov.br",
+   "nome": "Junta Comercial do Estado da Bahia",
+   "obs": "",
+   "ordem": 21,
+   "sigla": "JUCEB"
+  },
   "oab-ba": {
    "esfera": "estadual",
    "link": "https://www.oab-ba.org.br",
@@ -636,6 +685,22 @@ const SEED = {
    "obs": "Itens da tela \"Programas sociais\" do portal da Dataprev. Há outros ícones na tela (uma casa, um logo verde e azul) ainda não identificados.",
    "ordem": 1,
    "sigla": "Programas sociais"
+  },
+  "sefaz-ba": {
+   "esfera": "estadual",
+   "link": "https://www.sefaz.ba.gov.br",
+   "nome": "Secretaria da Fazenda do Estado da Bahia",
+   "obs": "",
+   "ordem": 22,
+   "sigla": "SEFAZ-BA"
+  },
+  "sjdh": {
+   "esfera": "estadual",
+   "link": "",
+   "nome": "Secretaria de Justiça e Direitos Humanos",
+   "obs": "Link do site a confirmar.",
+   "ordem": 23,
+   "sigla": "SJDH"
   }
  },
  "servicos": {
@@ -660,12 +725,93 @@ const SEED = {
    "ordem": 6,
    "orgaoId": "progsociais"
   },
+  "detran-agend-teorico": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Agendamento de exame teórico",
+   "obs": "Somente no site do DETRAN Bahia.",
+   "ordem": 2,
+   "orgaoId": "detran-ba"
+  },
+  "detran-defesa-previa": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Defesa prévia da suspensão do direito de dirigir",
+   "obs": "Somente no site do DETRAN Bahia.",
+   "ordem": 4,
+   "orgaoId": "detran-ba"
+  },
+  "detran-patio": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Verificar pátio de veículo acautelado",
+   "obs": "Órgão a confirmar (coloquei no DETRAN).",
+   "ordem": 7,
+   "orgaoId": "detran-ba"
+  },
+  "detran-reciclagem": {
+   "etapa": 0,
+   "link": "",
+   "linkBa": "https://www.ba.gov.br/servico/detran/solicitar-reciclagem-preventiva",
+   "nome": "Solicitar reciclagem preventiva",
+   "obs": "",
+   "ordem": 5,
+   "orgaoId": "detran-ba"
+  },
+  "detran-rep-legal-menor": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Representante legal para menor (veículos)",
+   "obs": "Somente no site do DETRAN Bahia.",
+   "ordem": 6,
+   "orgaoId": "detran-ba"
+  },
+  "detran-toxicologico": {
+   "etapa": 0,
+   "link": "https://www.gov.br/transportes/pt-br/assuntos/transito/conteudo-Senatran/exame-toxicologico",
+   "nome": "Toxicológico",
+   "obs": "Link de origem é da Senatran (gov.br).",
+   "ordem": 3,
+   "orgaoId": "detran-ba"
+  },
+  "detran-verif-agend": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Verificar agendamento de exames teórico/prático",
+   "obs": "Somente no site do DETRAN Bahia.",
+   "ordem": 1,
+   "orgaoId": "detran-ba"
+  },
   "id-jovem": {
    "etapa": 0,
    "link": "https://idjovem.juventude.gov.br",
    "nome": "ID Jovem",
    "ordem": 5,
    "orgaoId": "progsociais"
+  },
+  "juceb-req-universal": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Requerimento universal – Certidões Simplificada, Específica e de Inteiro Teor",
+   "obs": "",
+   "ordem": 1,
+   "orgaoId": "juceb"
+  },
+  "juceb-viabilidade": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Pedido de viabilidade",
+   "obs": "",
+   "ordem": 2,
+   "orgaoId": "juceb"
+  },
+  "passe-livre-intermunicipal": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Passe Livre Intermunicipal Digital",
+   "obs": "Definir o órgão responsável.",
+   "ordem": 1,
+   "orgaoId": "a-definir"
   },
   "scfv": {
    "etapa": 0,
@@ -674,6 +820,38 @@ const SEED = {
    "obs": "Link geral da assistência social do MDS; trocar pelo link específico do SCFV.",
    "ordem": 4,
    "orgaoId": "progsociais"
+  },
+  "sefaz-itd": {
+   "etapa": 0,
+   "link": "",
+   "nome": "ITD (cálculo e emissão de DAE para doação, causa mortis e inventário)",
+   "obs": "",
+   "ordem": 3,
+   "orgaoId": "sefaz-ba"
+  },
+  "sefaz-nfa-e": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Sistema de emissão de Notas Fiscais Avulsas Eletrônicas",
+   "obs": "",
+   "ordem": 1,
+   "orgaoId": "sefaz-ba"
+  },
+  "sefaz-senha": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Senha SEFAZ Serviços Online",
+   "obs": "",
+   "ordem": 2,
+   "orgaoId": "sefaz-ba"
+  },
+  "sjdh-tea": {
+   "etapa": 0,
+   "link": "",
+   "nome": "Identificação – TEA",
+   "obs": "Link da SJDH a preencher.",
+   "ordem": 1,
+   "orgaoId": "sjdh"
   },
   "tarifa-social": {
    "etapa": 0,
@@ -684,6 +862,7 @@ const SEED = {
   }
  }
 };
+const ORIG_IDS = ["orgaos/coren-ba", "orgaos/crea-ba", "orgaos/cremeb", "orgaos/cro-ba", "orgaos/crf-ba", "orgaos/crc-ba", "orgaos/cra-ba", "orgaos/core-ba", "orgaos/crt-ba", "orgaos/crefito-7", "orgaos/cref13", "orgaos/crdd-ba", "orgaos/crq-7", "orgaos/oab-ba", "orgaos/progsociais", "servicos/bolsa-familia", "servicos/tarifa-social", "servicos/bpc", "servicos/scfv", "servicos/id-jovem", "servicos/crianca-feliz"]; // itens da primeira versão da lista
 
 function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=no; document.head.appendChild(s);});}
 function rid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
@@ -693,9 +872,12 @@ function localDb(){
   const KEY="redir-dados-v1"; const subs={orgaos:[],servicos:[]};
   let data;
   try{data=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
-  if(!data||!data.orgaos) data={...JSON.parse(JSON.stringify(SEED)),v:2};
+  if(!data||!data.orgaos) data={...JSON.parse(JSON.stringify(SEED)),v:2,seen:[]};
   // v2: nova etapa "Serviços planejados" na frente; serviços já movidos avançam uma posição
   if(!data.v){ Object.values(data.servicos||{}).forEach(x=>{ if(x.atualizadoEm) x.etapa=(x.etapa|0)+1; }); data.v=2; }
+  // itens novos da lista base entram uma vez só (os que alguém excluiu não voltam)
+  if(!data.seen) data.seen=ORIG_IDS.slice();
+  for(const col of ["orgaos","servicos"]) for(const [id,d] of Object.entries(SEED[col])){ const k=col+"/"+id; if(!data.seen.includes(k)){ if(!data[col][id]) data[col][id]={...d}; data.seen.push(k);} }
   const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){toast("Não foi possível salvar no navegador.");}};
   persist();
   const snap=col=>({docs:Object.entries(data[col]||{}).map(([id,d])=>({id,data:()=>d}))});
@@ -719,7 +901,9 @@ async function firebaseDb(cfg){
   firebase.initializeApp(cfg); const fs=firebase.firestore();
   const ref=(col,id)=>{const r=fs.collection(col).doc(id); return {id:r.id,path:col+"/"+r.id,set:d=>r.set(d),update:d=>r.update(d),delete:()=>r.delete()};};
   const meta=await fs.collection("meta").doc("seed").get();
-  if(!meta.exists){ const b=fs.batch(); for(const col of ["orgaos","servicos"]) for(const [id,d] of Object.entries(SEED[col])) b.set(fs.collection(col).doc(id),d); b.set(fs.collection("meta").doc("seed"),{em:new Date().toISOString()}); await b.commit(); }
+  { const seen = meta.exists ? (meta.data().ids || ORIG_IDS) : []; const b=fs.batch(); let n=0;
+    for(const col of ["orgaos","servicos"]) for(const [id,d] of Object.entries(SEED[col])){ const k=col+"/"+id; if(!seen.includes(k)){ b.set(fs.collection(col).doc(id),d); seen.push(k); n++; } }
+    if(n||!meta.exists){ b.set(fs.collection("meta").doc("seed"),{em:new Date().toISOString(), ids:seen}); await b.commit(); } }
   return {kind:"firebase",
     doc:path=>{const [c,id]=path.split("/"); return ref(c,id);},
     collection:col=>({doc:id=>id?ref(col,id):ref(col,fs.collection(col).doc().id),
