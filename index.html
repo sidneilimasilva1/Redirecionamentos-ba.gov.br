@@ -14,11 +14,13 @@ body{margin:0;font-size:14px}
 /* Layout: cabeçalho fixo com filtros, faixa-resumo das etapas e um quadro kanban (raias por órgão ou quadro geral) que rola nos dois eixos. Tema claro fixo, fundo branco. */
 :root{
   color-scheme:light;
-  --bg:#ffffff; --surface:#ffffff; --sunk:#f2f4f7; --line:#dde2e8;
+  --bg:#ffffff; --surface:#ffffff; --sunk:#f5f6f8; --line:#dde2e8;
   --fg:#17212b; --muted:#5b6876; --accent:#1f4fd1; --accent-ink:#ffffff; --accent-soft:#e8eefc;
   --estadual:#0d7a6b; --estadual-soft:#dcf1ed; --federal:#9a5b00; --federal-soft:#f8ead2;
   --danger:#b4232c;
-  --e0:#7b8794; --e1:#5b6ed6; --e2:#3d7fd9; --e3:#1e95b8; --e4:#16a08a; --e5:#3a9a4a; --e6:#1d7d3c;
+  /* cor forte (borda, número) e cor de preenchimento de cada etapa */
+  --e0:#64748b; --e1:#7c4dcc; --e2:#4256d6; --e3:#1f7ad1; --e4:#b45c0a; --e5:#0d7f78; --e6:#4f7a10; --e7:#1d7d3c;
+  --t0:#eef1f5; --t1:#f2ebfd; --t2:#e9ecfd; --t3:#e3effc; --t4:#fdefdf; --t5:#ddf4f1; --t6:#edf5dc; --t7:#dcf2e3;
   --shadow:0 1px 2px rgba(20,30,45,.07),0 1px 1px rgba(20,30,45,.04);
   --f-display:"Sora","IBM Plex Sans",system-ui,sans-serif;
   --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -31,11 +33,33 @@ button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 a{color:inherit}
 
-.top{padding-block:14px 10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px;background:var(--surface);border-bottom:1px solid var(--line)}
-.row1{display:flex;flex-wrap:wrap;align-items:center;gap:12px;justify-content:space-between}
-.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
-.brand h1{margin:0;font-family:var(--f-display);font-size:20px;font-weight:700;letter-spacing:-.01em;text-wrap:balance}
-.brand p{margin:0;color:var(--muted);font-size:13px}
+.top{padding-block:14px 12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px;background:var(--surface);border-bottom:1px solid var(--line)}
+/* Cabeçalho preenchido */
+.row1{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;justify-content:space-between;padding:20px 22px;border-radius:14px;color:#fff;
+  background:radial-gradient(120% 140% at 0% 0%,#2a64e8 0%,transparent 55%),linear-gradient(115deg,#0a2463 0%,#163fa8 48%,#1b74c9 100%);box-shadow:0 6px 20px rgba(16,48,120,.22)}
+.row1::before,.row1::after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+.row1::before{width:260px;height:260px;right:-60px;top:-130px;background:rgba(255,255,255,.08)}
+.row1::after{width:160px;height:160px;right:180px;bottom:-110px;background:rgba(255,255,255,.06)}
+.row1>*{position:relative;z-index:1}
+.brand{display:flex;flex-direction:column;gap:4px;min-width:0}
+.brand .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.78)}
+.brand .eyebrow i{display:inline-flex;gap:3px}
+.brand .eyebrow i b{width:7px;height:7px;border-radius:2px;background:#fff;opacity:.9}
+.brand .eyebrow i b:nth-child(2){opacity:.6}.brand .eyebrow i b:nth-child(3){opacity:.35}
+.brand h1{margin:0;font-family:var(--f-display);font-size:26px;font-weight:700;letter-spacing:-.015em;text-wrap:balance;color:#fff}
+.brand h1 span{color:#9fd0ff}
+.brand p{margin:0;color:rgba(255,255,255,.82);font-size:13px}
+.row1 .btn{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.35);color:#fff}
+.row1 .btn:hover{background:rgba(255,255,255,.26)}
+.row1 .btn.primary{background:#fff;color:#0f3aa8;border-color:#fff}
+.row1 .btn.primary:hover{filter:none;background:#e9f0ff}
+.row1 .who{color:rgba(255,255,255,.85)!important}
+.row1 .who input{background:rgba(255,255,255,.95)!important;border-color:transparent!important;color:var(--fg)}
+.row1 .mode{color:rgba(255,255,255,.7)!important}
+.row1 .who{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted)}
+.who input{width:150px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.mode{font-size:12px;color:var(--muted)}
+.ro{color:#fff;border-color:rgba(255,255,255,.5)}
 .row2{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .seg{display:inline-flex;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:2px}
 .seg button{border:0;background:transparent;padding:5px 10px;border-radius:6px;cursor:pointer;color:var(--muted);font-weight:500}
@@ -53,14 +77,20 @@ a{color:inherit}
 .mode{font-size:12px;color:var(--muted)}
 .ro{font-size:12.5px;color:var(--muted);border:1px dashed var(--line);border-radius:8px;padding:5px 9px}
 
-.pipe{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
-.pipe .st{display:flex;flex-direction:column;gap:3px;padding:7px 9px;border-radius:8px;background:var(--sunk);border-top:3px solid var(--ec);min-width:0}
-.pipe .n{font-family:var(--f-display);font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
-.pipe .l{font-size:11.5px;color:var(--muted);line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-@media (max-width:720px){.pipe{grid-template-columns:repeat(4,minmax(0,1fr))}}
+/* Blocos de resumo */
+.pipe{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:10px}
+.pipe .st{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:4px;padding:12px 12px 11px;border-radius:12px;color:#fff;min-width:0;
+  background:linear-gradient(135deg,var(--ec) 0%,color-mix(in srgb,var(--ec) 72%,#fff) 100%);box-shadow:0 3px 10px color-mix(in srgb,var(--ec) 28%,transparent)}
+.pipe .st::after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-28px;top:-34px;background:rgba(255,255,255,.14);pointer-events:none}
+.pipe .st.total{--ec:#0b3d91}
+.pipe .l{position:relative;font-size:11.5px;font-weight:600;line-height:1.25;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;min-height:2.5em}
+.pipe .n{position:relative;font-family:var(--f-display);font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.pipe .d{position:relative;font-size:11px;color:rgba(255,255,255,.85);line-height:1.3}
+@media (max-width:1100px){.pipe{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:640px){.pipe{grid-template-columns:repeat(3,minmax(0,1fr))}.pipe .n{font-size:22px}.brand h1{font-size:22px}}
 
 .wrap{flex:1;min-height:0;overflow:auto;padding-bottom:24px}
-.grid{display:grid;grid-template-columns:repeat(7,minmax(var(--col),1fr));gap:0 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-width:calc(7*var(--col) + 6*8px + 32px);box-sizing:border-box}
+.grid{display:grid;grid-template-columns:repeat(8,minmax(var(--col),1fr));gap:0 8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));min-width:calc(8*var(--col) + 7*8px + 32px);box-sizing:border-box}
 .colh{position:sticky;top:0;z-index:3;background:var(--bg);padding:10px 2px 8px;display:flex;gap:7px;align-items:flex-start;border-bottom:2px solid var(--ec)}
 .colh .num{font-family:var(--f-mono);font-size:11px;font-weight:500;color:#fff;background:var(--ec);border-radius:4px;padding:1px 5px;flex:none;margin-top:1px}
 .colh .t{font-size:12.5px;font-weight:600;line-height:1.25}
@@ -81,25 +111,26 @@ a{color:inherit}
 .bar i{display:block;height:100%;background:var(--ec)}
 .prog{font-family:var(--f-mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
 
-.cell{display:flex;flex-direction:column;gap:6px;padding:6px;min-height:46px;border-radius:8px;background:var(--sunk);margin-top:6px}
+.cell{display:flex;flex-direction:column;gap:7px;padding:7px;min-height:46px;border-radius:8px;background:var(--sunk);margin-top:6px}
 .cell.over{outline:2px dashed var(--accent);outline-offset:-2px;background:var(--accent-soft)}
 .board-geral .cell{min-height:60vh}
 
-.card{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--ec);border-radius:7px;padding:7px 8px 6px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;gap:5px}
-.card:hover{border-color:var(--accent);border-left-color:var(--ec)}
+.card{background:var(--ec);color:#fff;border:1px solid var(--ec);border-radius:10px;padding:9px 10px 8px;box-shadow:var(--shadow);cursor:pointer;display:flex;flex-direction:column;gap:6px}
+.card:hover{filter:brightness(1.07);box-shadow:0 4px 12px color-mix(in srgb,var(--ec) 40%,transparent)}
+.card .stg{font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.85)}
 .card.dragging{opacity:.45}
-.card .nm{font-weight:500;line-height:1.3;overflow-wrap:anywhere}
-.card .meta{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:11.5px;color:var(--muted)}
-.chip{font-family:var(--f-mono);font-size:11px;background:var(--sunk);border-radius:4px;padding:1px 5px}
-.osig{font-weight:600;font-size:11.5px}
-.osig.estadual{color:var(--estadual)} .osig.federal{color:var(--federal)}
+.card .nm{font-weight:600;font-size:13.5px;line-height:1.3;overflow-wrap:anywhere;color:#fff}
+.card .meta{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:11.5px;color:rgba(255,255,255,.9)}
+.chip{font-family:var(--f-mono);font-size:11px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:4px;padding:1px 5px;color:#fff}
+.osig{font-weight:600;font-size:11px;background:rgba(255,255,255,.22);border-radius:999px;padding:1px 7px}
+.osig.estadual,.osig.federal{color:#fff}
 .mv{display:flex;align-items:center;gap:4px;margin-top:1px}
-.mv button{border:1px solid var(--line);background:transparent;border-radius:5px;width:26px;height:22px;cursor:pointer;color:var(--muted);line-height:1}
-.mv button:hover:not(:disabled){color:var(--fg);background:var(--sunk)}
+.mv button{border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.15);color:#fff!important;border-radius:5px;width:26px;height:22px;cursor:pointer;color:var(--muted);line-height:1}
+.mv button:hover:not(:disabled){background:rgba(255,255,255,.32)}
 .mv button:disabled{opacity:.3;cursor:default}
 .mv .links{margin-left:auto;display:inline-flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.mv .ext{font-size:12px}
-.ext.ba{color:var(--estadual)}
+.mv .ext{font-size:12px;color:#fff;text-decoration:underline;text-underline-offset:2px}
+.mv .ext.ba{font-weight:600}
 .addsv{border:1px dashed var(--line);background:transparent;border-radius:7px;padding:5px;color:var(--muted);cursor:pointer;font-size:12.5px}
 .addsv:hover{color:var(--accent);border-color:var(--accent)}
 
@@ -131,8 +162,9 @@ a{color:inherit}
 <div class="top">
   <div class="row1">
     <div class="brand">
-      <h1>Redirecionamentos ba.gov.br</h1>
-      <p>Planejamento 2027 · órgãos e serviços que serão redirecionados para plataformas externas · <span class="mode" id="mode"></span></p>
+      <span class="eyebrow"><i aria-hidden="true"><b></b><b></b><b></b></i>Planejamento 2027</span>
+      <h1>Redirecionamentos <span>ba.gov.br</span></h1>
+      <p>Órgãos e serviços que serão redirecionados para plataformas externas · <span class="mode" id="mode"></span></p>
     </div>
     <div class="row2">
       <label class="who" for="nome">Seu nome <input id="nome" type="text" placeholder="para o histórico" autocomplete="name"></label>
@@ -164,6 +196,7 @@ a{color:inherit}
 
 <script>
 const ETAPAS = [
+  "Serviços planejados",
   "Cadastro na Carta de Serviços",
   "Cadastro no ambiente de homologação do ba.gov.br",
   "Solicitação do ID do serviço e ID da etapa",
@@ -182,7 +215,9 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function href(u){u=String(u||"").trim(); if(!u)return ""; if(!/^https?:\/\//i.test(u)) u="https://"+u; return u;}
 function host(u){try{return new URL(href(u)).hostname.replace(/^www\./,"")}catch(e){return u}}
-const ec = i => `--ec:var(--e${i})`;
+const ec = i => `--ec:var(--e${i});--tc:var(--t${i})`;
+const LAST = ETAPAS.length-1; // "Em produção"
+const num = i => i<LAST ? String(i+1) : "✓";
 function toast(msg){const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true,3200);}
 
 /* Escritas: uma por documento de cada vez */
@@ -218,28 +253,31 @@ function visible(){
 /* Render */
 function render(){
   const vis=visible();
-  const counts=Array(7).fill(0); vis.forEach(v=>v.svs.forEach(s=>counts[s.etapa|0]++));
-  $("#pipe").innerHTML = ETAPAS.map((t,i)=>`<div class="st" style="${ec(i)}" title="${esc(t)}"><span class="n">${counts[i]}</span><span class="l">${i<6?(i+1)+". ":""}${esc(t)}</span></div>`).join("");
+  const counts=Array(ETAPAS.length).fill(0); vis.forEach(v=>v.svs.forEach(s=>counts[s.etapa|0]++));
+  const tot=counts.reduce((a,b)=>a+b,0), est=vis.filter(v=>v.o.esfera==="estadual").length, fed=vis.length-est;
+  const pct=n=>tot?Math.round(n/tot*100)+"% do total":"—";
+  $("#pipe").innerHTML = `<div class="st total"><span class="l">Total de serviços</span><span class="n">${tot}</span><span class="d">${vis.length} órgão${vis.length===1?"":"s"} · ${est} estadua${est===1?"l":"is"} · ${fed} federa${fed===1?"l":"is"}</span></div>`
+    + ETAPAS.map((t,i)=>`<div class="st" style="${ec(i)}" title="${esc(t)}"><span class="l">${i<LAST?(i+1)+". ":"✓ "}${esc(t)}</span><span class="n">${counts[i]}</span><span class="d">${pct(counts[i])}</span></div>`).join("");
   document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===UI.view));
   document.querySelectorAll("[data-esf]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.esf===UI.esf));
 
   const board=$("#board");
   board.className="grid board-"+UI.view;
-  let h = ETAPAS.map((t,i)=>`<div class="colh" style="${ec(i)}"><span class="num">${i<6?i+1:"✓"}</span><span class="t">${esc(t)}</span><span class="c">${counts[i]}</span></div>`).join("");
+  let h = ETAPAS.map((t,i)=>`<div class="colh" style="${ec(i)}"><span class="num">${num(i)}</span><span class="t">${esc(t)}</span><span class="c">${counts[i]}</span></div>`).join("");
 
   if(S.dbState==="off"){
     h += `<div class="empty"><h2>O painel não conseguiu carregar os dados</h2><p>Verifique a configuração do Firebase no início do script ou recarregue a página.</p></div>`;
   } else if(S.dbState==="loading"){
     h += `<div class="empty"><p>Carregando órgãos e serviços…</p></div>`;
   } else if(!S.orgaos.size){
-    h += `<div class="empty"><h2>Nenhum órgão cadastrado</h2><p>Comece por <b>+ Órgão</b> e depois adicione os serviços de cada um. Cada serviço anda pelas 6 etapas até entrar em produção.</p></div>`;
+    h += `<div class="empty"><h2>Nenhum órgão cadastrado</h2><p>Comece por <b>+ Órgão</b> e depois adicione os serviços de cada um. Cada serviço começa em "Serviços planejados" e anda pelas etapas até entrar em produção.</p></div>`;
   } else if(!vis.length){
     h += `<div class="empty"><p>Nada encontrado com esses filtros.</p></div>`;
   } else if(UI.view==="orgao"){
     for(const {o,svs} of vis){
       const col=UI.collapsed.has(o.id);
-      const done=svs.filter(s=>(s.etapa|0)===6).length;
-      const dist=Array(7).fill(0); svs.forEach(s=>dist[s.etapa|0]++);
+      const done=svs.filter(s=>(s.etapa|0)===LAST).length;
+      const dist=Array(ETAPAS.length).fill(0); svs.forEach(s=>dist[s.etapa|0]++);
       const bar = svs.length ? dist.map((n,i)=>n?`<i style="${ec(i)};width:${n/svs.length*100}%"></i>`:"").join("") : "";
       h += `<div class="lane"><div class="lane-in">
         <button class="tog" type="button" data-tog="${o.id}" aria-label="${col?"Expandir":"Recolher"} ${esc(o.sigla)}" aria-expanded="${!col}">${col?"▶":"▼"}</button>
@@ -252,13 +290,13 @@ function render(){
         <span class="w"><button class="btn small" type="button" data-edit-org="${o.id}">Editar</button> <button class="btn small" type="button" data-add-sv="${o.id}">+ Serviço</button></span>
       </div></div>`;
       if(col) continue;
-      for(let i=0;i<7;i++){
+      for(let i=0;i<ETAPAS.length;i++){
         const cs=svs.filter(s=>(s.etapa|0)===i);
         h += `<div class="cell" data-cell="${i}" data-org="${o.id}">${cs.map(s=>card(s,false)).join("")}${i===0?`<button class="addsv w" type="button" data-add-sv="${o.id}">+ serviço</button>`:""}</div>`;
       }
     }
   } else {
-    for(let i=0;i<7;i++){
+    for(let i=0;i<ETAPAS.length;i++){
       const cs=[]; vis.forEach(v=>v.svs.forEach(s=>{if((s.etapa|0)===i)cs.push(s)}));
       h += `<div class="cell" data-cell="${i}">${cs.map(s=>card(s,true)).join("")}</div>`;
     }
@@ -274,11 +312,12 @@ function card(s,showOrg){
   if(s.idEtapa) meta.push(`<span class="chip" title="ID da etapa">etapa ${esc(s.idEtapa)}</span>`);
   if(s.redmine) meta.push(`<span class="chip" title="Chamado no Redmine">#${esc(s.redmine)}</span>`);
   return `<div class="card" draggable="true" data-sv="${s.id}" style="${ec(e)}" tabindex="0" role="button" aria-label="${esc(s.nome)}, etapa: ${esc(ETAPAS[e])}">
+    <div class="stg">${num(e)} · ${esc(ETAPAS[e])}</div>
     <div class="nm">${esc(s.nome)}</div>
     ${meta.length?`<div class="meta">${meta.join("")}</div>`:""}
     <div class="mv">
       <button class="w" type="button" data-mv="-1" data-id="${s.id}" ${e===0?"disabled":""} aria-label="Voltar etapa">‹</button>
-      <button class="w" type="button" data-mv="1" data-id="${s.id}" ${e===6?"disabled":""} aria-label="Avançar etapa">›</button>
+      <button class="w" type="button" data-mv="1" data-id="${s.id}" ${e===LAST?"disabled":""} aria-label="Avançar etapa">›</button>
       <span class="links">${s.linkBa?`<a class="ext ba" href="${esc(href(s.linkBa))}" target="_blank" rel="noopener noreferrer" title="${esc(href(s.linkBa))}">ba.gov.br ↗</a>`:""}${s.link?`<a class="ext" href="${esc(href(s.link))}" target="_blank" rel="noopener noreferrer" title="${esc(href(s.link))}">origem ↗</a>`:""}</span>
     </div>
   </div>`;
@@ -294,7 +333,7 @@ function applyRO(){
 /* Ações */
 function moveSv(id, etapa){
   const s=S.servicos.get(id); if(!s||!S.db) return;
-  etapa=Math.max(0,Math.min(6,etapa)); if((s.etapa|0)===etapa) return;
+  etapa=Math.max(0,Math.min(LAST,etapa)); if((s.etapa|0)===etapa) return;
   write("servicos/"+id, ()=>S.db.doc("servicos/"+id).update({etapa, ...stamp()}));
 }
 
@@ -388,7 +427,7 @@ function openSv(id, orgId){
   shell(s?"Editar serviço":"Novo serviço", "", `
     <div class="f full"><label for="s_nome">Nome do serviço</label><input id="s_nome" value="${esc(s?.nome)}" placeholder="Ex.: Inscrição de pessoa física"></div>
     <div class="f"><label for="s_org">Órgão</label><select id="s_org">${orgs.map(o=>`<option value="${o.id}">${esc(o.sigla||o.nome)}</option>`).join("")}</select></div>
-    <div class="f"><label for="s_et">Etapa</label><select id="s_et">${ETAPAS.map((t,i)=>`<option value="${i}">${i<6?(i+1)+". ":"✓ "}${esc(t)}</option>`).join("")}</select></div>
+    <div class="f"><label for="s_et">Etapa</label><select id="s_et">${ETAPAS.map((t,i)=>`<option value="${i}">${i<LAST?(i+1)+". ":"✓ "}${esc(t)}</option>`).join("")}</select></div>
     <div class="f full"><label for="s_link">Link do serviço na plataforma de origem</label><input id="s_link" value="${esc(s?.link)}" placeholder="https://…" inputmode="url"><span class="hint">Para onde o redirecionamento leva.</span></div>
     <div class="f full"><label for="s_linkba">Link do serviço no ba.gov.br</label><input id="s_linkba" value="${esc(s?.linkBa)}" placeholder="https://www.ba.gov.br/…" inputmode="url"><span class="hint">A página do ba.gov.br que faz o redirecionamento.</span></div>
     <div class="f"><label for="s_ids">ID do serviço</label><input id="s_ids" value="${esc(s?.idServico)}"></div>
@@ -604,7 +643,9 @@ function localDb(){
   const KEY="redir-dados-v1"; const subs={orgaos:[],servicos:[]};
   let data;
   try{data=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){}
-  if(!data||!data.orgaos) data=JSON.parse(JSON.stringify(SEED));
+  if(!data||!data.orgaos) data={...JSON.parse(JSON.stringify(SEED)),v:2};
+  // v2: nova etapa "Serviços planejados" na frente; serviços já movidos avançam uma posição
+  if(!data.v){ Object.values(data.servicos||{}).forEach(x=>{ if(x.atualizadoEm) x.etapa=(x.etapa|0)+1; }); data.v=2; }
   const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){toast("Não foi possível salvar no navegador.");}};
   persist();
   const snap=col=>({docs:Object.entries(data[col]||{}).map(([id,d])=>({id,data:()=>d}))});
@@ -617,7 +658,7 @@ function localDb(){
   return {kind:"local",
     doc:path=>{const [c,id]=path.split("/"); return ref(c,id);},
     collection:col=>({doc:id=>ref(col,id||rid()), onSnapshot:(cb)=>{subs[col].push(cb); cb(snap(col)); return ()=>{};}}),
-    replaceAll:async d=>{data={orgaos:d.orgaos||{},servicos:d.servicos||{}}; persist(); emit("orgaos"); emit("servicos");}};
+    replaceAll:async d=>{data={orgaos:d.orgaos||{},servicos:d.servicos||{},v:2}; persist(); emit("orgaos"); emit("servicos");}};
 }
 
 /* Banco compartilhado (Firebase Firestore) */
@@ -643,7 +684,7 @@ $("#nome").addEventListener("change",e=>{S.uid=e.target.value.trim()||null; try{
 
 /* Exportar / Importar */
 $("#btnExport").onclick=()=>{
-  const out={exportadoEm:new Date().toISOString(),orgaos:{},servicos:{}};
+  const out={exportadoEm:new Date().toISOString(),versao:2,orgaos:{},servicos:{}};
   S.orgaos.forEach((v,k)=>{const {id,...d}=v; out.orgaos[k]=d;});
   S.servicos.forEach((v,k)=>{const {id,...d}=v; out.servicos[k]=d;});
   const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:"application/json"}));
@@ -652,7 +693,8 @@ $("#btnExport").onclick=()=>{
 $("#btnImport").onclick=()=>$("#fileImport").click();
 $("#fileImport").onchange=async e=>{
   const f=e.target.files[0]; e.target.value=""; if(!f||!S.db) return;
-  try{const d=JSON.parse(await f.text()); if(!d.orgaos) throw 0; await S.db.replaceAll(d); toast("Dados importados.");}
+  try{const d=JSON.parse(await f.text()); if(!d.orgaos) throw 0;
+    if(!d.versao) Object.values(d.servicos||{}).forEach(x=>{ if(x.atualizadoEm) x.etapa=(x.etapa|0)+1; }); await S.db.replaceAll(d); toast("Dados importados.");}
   catch(x){toast("Arquivo inválido. Use um arquivo gerado pelo botão Exportar.");}
 };
 
