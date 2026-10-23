@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hemoba – Doe sangue – Protótipo ba.gov.br</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700;6..12,800;6..12,900&display=swap">
+<style>
+/* Padrão visual único das páginas do multisites: barra do governo, cabeçalho com logo, conteúdo em cartões brancos sobre fundo claro, rodapé azul-marinho */
+:root{
+  --navy:#062a5f; --navy2:#0a3a80; --blue:#0b4fc4; --blue-ink:#0a3f9c; --blue-soft:#eaf1ff; --blue-line:#cfdcf7;
+  --red:#d6202f; --red-soft:#fdecee; --green:#178a45; --green-soft:#e6f5ec; --orange:#e2700f; --orange-soft:#fff2e3;
+  --ink:#1b2738; --muted:#5d6879; --line:#e1e7f0; --bg:#f4f7fb; --card:#ffffff;
+  --r:14px; --shadow:0 4px 18px rgba(12,40,90,.07);
+  --font:"Nunito Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --fs:16px;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs);scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid #ffbf3c;outline-offset:2px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+svg.i{width:1.25em;height:1.25em;flex:none;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.25em}
+
+/* Faixa de protótipo */
+.proto{background:#ffd54a;color:#3a2c00;font-size:.78rem;font-weight:700;text-align:center;padding:5px 12px}
+.proto a{font-weight:800}
+
+/* Barra do governo */
+.gov{background:var(--navy);color:#fff;font-size:.74rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.gov .wrap{display:flex;align-items:center;gap:18px;min-height:38px;flex-wrap:wrap}
+.gov button,.gov a{background:none;border:0;color:#fff;cursor:pointer;text-decoration:none;font-weight:700;letter-spacing:.04em;padding:4px 2px;display:inline-flex;align-items:center;gap:6px}
+.gov .sp{flex:1}
+.gov .fsz{display:inline-flex;gap:10px}
+@media (max-width:720px){.gov .hide-m{display:none}}
+
+/* Cabeçalho */
+.hdr{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+.hdr .wrap{display:flex;align-items:center;gap:26px;min-height:78px}
+.logo{display:block;flex:none}
+.logo img{display:block;height:46px;width:auto}
+.nav{display:flex;gap:6px;margin-left:auto;align-items:center}
+.nav>a,.nav>.dd>button{display:inline-flex;align-items:center;gap:4px;padding:10px 12px;border-radius:8px;background:none;border:0;cursor:pointer;text-decoration:none;font-weight:800;font-size:.86rem;color:var(--blue-ink);text-transform:uppercase;letter-spacing:.02em}
+.nav>a:hover,.nav>.dd>button:hover{background:var(--blue-soft)}
+.nav>a.on{color:var(--red)}
+.dd{position:relative}
+.dd .menu{position:absolute;top:100%;left:0;min-width:260px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px rgba(10,30,70,.16);padding:8px;display:none}
+.dd.open .menu{display:block}
+.dd .menu a{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem;color:var(--ink)}
+.dd .menu a:hover{background:var(--blue-soft);color:var(--blue-ink)}
+.hbtns{display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:11px 20px;border-radius:999px;border:1.5px solid var(--blue);background:var(--blue);color:#fff;font-weight:800;font-size:.84rem;text-transform:uppercase;letter-spacing:.03em;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--blue-ink);border-color:var(--blue-ink)}
+.btn.out{background:#fff;color:var(--blue-ink)}
+.btn.out:hover{background:var(--blue-soft)}
+.btn.sq{border-radius:10px}
+.btn.red{background:var(--red);border-color:var(--red)}
+.burger{display:none;margin-left:auto;background:#fff;border:1px solid var(--line);border-radius:10px;padding:9px 11px;cursor:pointer}
+@media (max-width:980px){.nav,.hbtns{display:none}.burger{display:inline-flex}.hdr.open .nav{display:flex;position:absolute;top:100%;left:0;right:0;flex-direction:column;align-items:stretch;background:#fff;border-bottom:1px solid var(--line);padding:10px 20px}.dd .menu{position:static;box-shadow:none;border:0}}
+
+/* Elementos comuns */
+main{min-height:60vh;padding-bottom:40px}
+.crumb{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.9rem;color:var(--muted);padding:22px 0 14px}
+.crumb a{color:var(--blue);text-decoration:none;font-weight:600}
+.crumb a:hover{text-decoration:underline}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+h1,h2,h3{text-wrap:balance}
+.h1{font-size:clamp(2rem,3.6vw,2.9rem);line-height:1.08;font-weight:900;letter-spacing:-.02em;color:var(--blue-ink);margin:0}
+.lead{font-size:1.15rem;color:var(--muted);margin:8px 0 0}
+.sec{margin-top:30px}
+.sechead{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.sechead h2{margin:0;font-size:1.4rem;font-weight:900;color:var(--blue-ink)}
+.sechead p{margin:2px 0 0;color:var(--muted);font-size:.92rem}
+.tlink{color:var(--blue);font-weight:800;font-size:.9rem;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.tlink:hover{text-decoration:underline}
+.notice{display:flex;gap:12px;align-items:flex-start;background:var(--blue-soft);border:1px solid var(--blue-line);color:#1a3d85;border-radius:12px;padding:15px 18px;font-size:.92rem;margin-top:26px}
+.notice svg{color:var(--blue);margin-top:1px;width:1.4em;height:1.4em}
+.tag{display:inline-block;font-size:.66rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:3px 7px;background:var(--green-soft);color:#11683a;vertical-align:middle}
+.ext::after{content:"↗";font-size:.85em;margin-left:3px}
+
+/* ---------- Início do multisites ---------- */
+.mhero{margin-top:22px;border-radius:20px;color:#fff;padding:42px 40px;position:relative;overflow:hidden;background:radial-gradient(120% 140% at 0% 0%,#1d62e0 0%,transparent 55%),linear-gradient(115deg,#05224f 0%,#0b3d91 55%,#1269c9 100%)}
+.mhero::after{content:"";position:absolute;width:420px;height:420px;border-radius:50%;right:-120px;top:-180px;background:rgba(255,255,255,.07)}
+.mhero h1{margin:0;font-size:clamp(2rem,3.4vw,2.8rem);font-weight:900;line-height:1.08;max-width:720px;position:relative}
+.mhero p{position:relative;max-width:640px;color:rgba(255,255,255,.86);font-size:1.08rem;margin:12px 0 0}
+.mhero .stripe{display:flex;gap:6px;margin-bottom:16px;position:relative}
+.mhero .stripe i{height:5px;width:42px;border-radius:3px;background:#fff}
+.mhero .stripe i:nth-child(2){background:#e3212f}.mhero .stripe i:nth-child(3){background:#2f7df0}
+.sites{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+.site{display:flex;flex-direction:column;gap:12px;padding:22px;text-decoration:none;transition:transform .15s,box-shadow .15s;cursor:pointer}
+.site:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(12,40,90,.13)}
+.site .ic{width:54px;height:54px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;color:#fff}
+.site h3{margin:0;font-size:1.15rem;font-weight:900;color:var(--blue-ink)}
+.site p{margin:0;color:var(--muted);font-size:.92rem;flex:1}
+.site .go{display:flex;justify-content:space-between;align-items:center;font-weight:800;color:var(--blue);font-size:.88rem;border-top:1px solid var(--line);padding-top:12px}
+.std{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.std .card{padding:18px}
+.std b{display:block;color:var(--blue-ink);font-size:1rem;margin:8px 0 4px}
+.std span{color:var(--muted);font-size:.88rem}
+.std .n{width:30px;height:30px;border-radius:8px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;font-weight:900}
+@media (max-width:900px){.std{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.std{grid-template-columns:1fr}.mhero{padding:30px 22px}}
+
+/* ---------- Conselhos ---------- */
+.cgrid{display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start}
+.search{display:flex;align-items:center;gap:10px;border:1.5px solid #9aa6b8;border-radius:999px;padding:12px 18px;background:#fff;margin-top:22px;box-shadow:0 2px 0 rgba(0,0,0,.03)}
+.search:focus-within{border-color:var(--blue);box-shadow:0 0 0 4px var(--blue-soft)}
+.search input{border:0;outline:0;flex:1;min-width:0;font-size:1rem;background:transparent}
+.search svg{color:var(--muted);width:1.4em;height:1.4em}
+.chips{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 20px}
+.chip{border:1.5px solid var(--blue);background:#fff;color:var(--blue-ink);border-radius:999px;padding:8px 22px;font-weight:800;cursor:pointer;font-size:.92rem}
+.chip[aria-pressed="true"]{background:var(--blue);color:#fff}
+.side h2{font-size:1.15rem;font-weight:900;color:var(--blue-ink);margin:4px 0 14px}
+.side{border-left:1px solid var(--line);padding-left:24px}
+.short{display:flex;align-items:center;gap:16px;padding:18px;margin-bottom:12px;text-decoration:none;cursor:pointer}
+.short .ib{width:46px;height:46px;border-radius:10px;background:var(--blue);color:#fff;display:grid;place-items:center;flex:none}
+.short .ib.o{background:#fff;color:var(--blue-ink);border:2px solid var(--blue-ink)}
+.short b{flex:1;color:var(--blue-ink);font-size:1.02rem}
+.short:hover{border-color:var(--blue)}
+.cons{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.con{border:1.5px solid var(--blue-line);display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+.con:hover{border-color:var(--blue);box-shadow:0 12px 28px rgba(12,40,90,.12)}
+.con .top{display:flex;gap:18px;align-items:center;padding:20px 22px 16px;border-bottom:1px solid var(--line);cursor:pointer;text-decoration:none}
+.con .top svg{width:58px;height:58px;color:var(--blue-ink);stroke-width:1.5}
+.con h3{margin:0;font-size:1.25rem;font-weight:900;color:var(--blue-ink)}
+.con .top p{margin:2px 0 0;color:var(--muted);font-size:.9rem;line-height:1.35}
+.acts{display:grid;grid-template-columns:repeat(4,1fr)}
+.acts a{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 4px 16px;text-decoration:none;font-size:.74rem;font-weight:800;color:var(--blue-ink);text-align:center;line-height:1.2}
+.acts a+a{border-left:1px solid var(--line)}
+.acts a svg{width:30px;height:30px;stroke-width:1.5}
+.acts a:hover{background:var(--blue-soft)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:30px}
+@media (max-width:980px){.cgrid{grid-template-columns:1fr}.side{border-left:0;padding-left:0}}
+
+/* Página padrão de órgão (conselho) */
+.ohero{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:center;padding:28px 30px;margin-top:4px}
+.ohero .big{width:96px;height:96px;border-radius:22px;background:var(--blue-soft);display:grid;place-items:center;color:var(--blue-ink)}
+.ohero .big svg{width:60px;height:60px;stroke-width:1.4}
+.ohero .eyebrow{font-size:.76rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--green);margin:0 0 4px}
+.ohero h1{margin:0;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:900;color:var(--blue-ink);line-height:1.1}
+.ohero p{margin:6px 0 0;color:var(--muted)}
+.svc{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.sv{display:flex;gap:15px;padding:20px;text-decoration:none;transition:transform .15s,box-shadow .15s;min-height:130px}
+.sv:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(12,40,90,.12)}
+.sv .ib{flex:none;width:50px;height:50px;border-radius:12px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center}
+.sv .ib svg{width:28px;height:28px}
+.sv h3{margin:0 0 4px;font-size:1.02rem;font-weight:900;color:var(--blue-ink)}
+.sv p{margin:0;color:var(--muted);font-size:.88rem}
+.sv .ar{margin-top:8px;color:var(--blue);font-weight:800;font-size:.84rem}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{padding:24px}
+.panel h3{margin:0 0 8px;font-size:1.15rem;font-weight:900;color:var(--blue-ink)}
+.panel p,.panel li{color:var(--muted);font-size:.95rem}
+.panel ul{padding-left:20px;margin:8px 0 16px}
+@media (max-width:900px){.svc{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.ohero{grid-template-columns:1fr}.ohero .big{width:74px;height:74px}}
+@media (max-width:560px){.svc{grid-template-columns:1fr}}
+
+/* ---------- Hemoba ---------- */
+.hhero{display:grid;grid-template-columns:1.05fr 1fr;gap:22px;align-items:stretch;margin-top:22px}
+.hcopy{padding:36px 34px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(160deg,#fff 0%,#fff 55%,#fdeef0 100%)}
+.hcopy h1{margin:0;font-size:clamp(2.1rem,3.8vw,3.1rem);font-weight:900;color:var(--blue-ink);line-height:1.05;letter-spacing:-.02em}
+.hcopy .sub{font-size:1.35rem;color:var(--blue);margin:8px 0 18px;font-weight:600}
+.hcopy p{margin:0 0 22px;color:#374355}
+.hcopy .acts2{display:flex;gap:12px;flex-wrap:wrap}
+.hcopy .drop{position:absolute;right:-30px;bottom:-40px;width:220px;opacity:.12;color:var(--red)}
+.stock{padding:24px}
+.stock .hd{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:16px}
+.stock .hd h2{margin:0;font-size:1.15rem;font-weight:900}
+.live{font-size:.8rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:#22a352}
+.sbody{display:grid;grid-template-columns:auto 1fr 1.25fr;gap:18px;align-items:center}
+.light{width:62px;padding:9px 0;background:#1e2329;border-radius:16px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:inset 0 0 0 3px #3a414a}
+.light i{width:40px;height:40px;border-radius:50%;background:#3d4249}
+.light i.r{background:#e8323c;box-shadow:0 0 14px #e8323c99}.light i.y{background:#f7c51e;box-shadow:0 0 14px #f7c51e99}.light i.g{background:#25c058;box-shadow:0 0 16px #25c058aa}
+.light.st-estavel i.r,.light.st-estavel i.y{opacity:.25;box-shadow:none}
+.sit small{display:block;font-weight:800;font-size:.84rem}
+.sit strong{display:block;font-size:1.7rem;font-weight:900;color:var(--green);letter-spacing:.02em}
+.sit span{color:var(--muted);font-size:.9rem}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.kpi small{display:flex;align-items:center;gap:6px;font-size:.72rem;color:var(--muted);font-weight:700}
+.kpi small svg{color:var(--red)}
+.kpi b{display:block;font-size:1.35rem;font-weight:900;font-variant-numeric:tabular-nums}
+.types{padding:22px}
+.types .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+.types h2{margin:0;font-size:1.2rem;font-weight:900;color:var(--blue-ink)}
+.tgrid{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}
+.tp{border:1px solid var(--line);border-radius:12px;padding:12px 10px;text-align:center}
+.tp .g{font-size:1.5rem;font-weight:900;line-height:1}
+.tp .q{font-size:.86rem;margin:6px 0 8px}
+.tp .st{display:inline-block;font-size:.7rem;font-weight:800;border-radius:5px;padding:2px 7px}
+.tp .bar{height:7px;border-radius:4px;background:#eef1f5;margin:10px 4px 6px;overflow:hidden}
+.tp .bar i{display:block;height:100%;border-radius:4px}
+.tp .pc{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.lv-ok .g{color:var(--green)}.lv-ok .st{background:var(--green-soft);color:#11683a}.lv-ok .bar i{background:var(--green)}
+.lv-at .g{color:var(--orange)}.lv-at .st{background:var(--orange-soft);color:#a24d05}.lv-at .bar i{background:var(--orange)}
+.lv-cr .g{color:var(--red)}.lv-cr .st{background:var(--red-soft);color:#a8121e}.lv-cr .bar i{background:var(--red)}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.three .panel h3{font-size:1.12rem}
+.fld{display:flex;align-items:center;gap:10px;border:1px solid #cfd6e1;border-radius:10px;padding:10px 12px;margin-bottom:10px;background:#fff}
+.fld select,.fld input{border:0;outline:0;flex:1;min-width:0;background:transparent}
+.fld svg{color:var(--blue)}
+.ul2{list-style:none;padding:0;margin:12px 0 16px}
+.ul2 li{display:flex;gap:10px;align-items:center;padding:5px 0;color:#374355;font-size:.95rem}
+.ul2 svg{color:var(--blue)}
+.camp{display:flex;gap:14px;align-items:center;border-radius:12px;padding:14px;margin-top:10px;text-decoration:none;border:1px solid var(--blue-line);background:var(--blue-soft)}
+.camp.y{background:#fff7e6;border-color:#f6dfae}
+.camp b{display:block;color:var(--blue-ink)}
+.camp span{font-size:.86rem;color:#374355}
+.camp .ch{margin-left:auto;color:var(--blue)}
+.camp .ci{width:40px;height:40px;flex:none;color:var(--red)}
+.camp.y .ci{color:var(--orange)}
+.nums{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:16px 18px}
+.num{display:flex;gap:12px;align-items:center}
+.num .ci{width:46px;height:46px;border-radius:50%;background:#f4f6fa;display:grid;place-items:center;flex:none;color:var(--blue-ink)}
+.num .ci.r{color:var(--red)}
+.num b{display:block;font-size:1.2rem;font-weight:900;color:var(--blue-ink);font-variant-numeric:tabular-nums}
+.num span{font-size:.84rem;color:var(--muted)}
+.illus{font-size:.78rem;color:var(--muted);margin-top:8px}
+@media (max-width:1100px){.tgrid{grid-template-columns:repeat(4,1fr)}.nums{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:900px){.hhero,.three{grid-template-columns:1fr}.sbody{grid-template-columns:auto 1fr}.kpis{grid-column:1/-1}}
+@media (max-width:560px){.tgrid{grid-template-columns:repeat(2,1fr)}.nums{grid-template-columns:1fr 1fr}}
+
+/* ---------- CICAN ---------- */
+.chero{display:grid;grid-template-columns:1fr 1.05fr;overflow:hidden;margin-top:4px}
+.ccopy{padding:38px 36px;display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
+.ccopy h1{margin:0;font-size:clamp(2rem,3.4vw,2.9rem);line-height:1.08;font-weight:900;color:var(--blue-ink);letter-spacing:-.02em}
+.ccopy h1 span{color:var(--ink)}
+.flag{display:flex;gap:0;margin:14px 0 18px}
+.flag i{height:5px;width:48px}
+.flag i:nth-child(1){background:#0b4fc4}.flag i:nth-child(2){background:#e3212f}.flag i:nth-child(3){background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.ccopy p{margin:0 0 22px;color:#465163;max-width:470px;font-size:1.05rem}
+.ccopy .acts2{display:flex;gap:12px;flex-wrap:wrap}
+.cart{position:relative;min-height:340px;background:linear-gradient(135deg,#dfeaf6 0%,#b9d3e6 55%,#9fc2d8 100%);overflow:hidden}
+.cart svg.scene{position:absolute;inset:0;width:100%;height:100%}
+.cart .lbl{position:absolute;left:18px;bottom:18px;background:rgba(255,255,255,.94);border-radius:10px;padding:10px 14px;font-weight:800;font-size:.86rem;box-shadow:0 4px 18px rgba(0,0,0,.12)}
+.cart .wm{position:absolute;right:26px;top:26px;text-align:right;color:#183a64}
+.cart .wm b{display:block;font-size:2.6rem;font-weight:900;letter-spacing:.04em;line-height:1}
+.cart .wm span{display:block;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;line-height:1.3}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);padding:14px 6px;margin-top:16px}
+.fact{display:flex;gap:12px;align-items:center;padding:4px 20px}
+.fact+.fact{border-left:1px solid var(--line)}
+.fact svg{color:var(--blue);width:1.6em;height:1.6em}
+.fact b{display:block;font-size:.9rem}
+.fact span{display:block;color:var(--muted);font-size:.84rem}
+.ncards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.nc{display:flex;gap:16px;padding:20px;align-items:flex-start}
+.nc .ib{flex:none;width:54px;height:54px;border-radius:14px;background:var(--green-soft);color:var(--green);display:grid;place-items:center}
+.nc .ib svg{width:30px;height:30px}
+.nc h3{margin:0 0 4px;font-size:1.05rem;font-weight:900}
+.nc p{margin:0;color:var(--muted);font-size:.9rem}
+@media (max-width:900px){.chero{grid-template-columns:1fr}.cart{min-height:240px;order:-1}.facts{grid-template-columns:1fr}.fact+.fact{border-left:0;border-top:1px solid var(--line)}.fact{padding:10px 16px}.ncards{grid-template-columns:1fr}}
+
+/* Rodapé */
+.ftr{background:var(--navy);color:#dbe5f5;margin-top:40px}
+.ftr .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding-block:34px 22px}
+.ftr h4{margin:0 0 10px;color:#fff;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+.ftr a{display:block;color:#dbe5f5;text-decoration:none;font-size:.88rem;margin:7px 0}
+.ftr a:hover{color:#fff;text-decoration:underline}
+.ftr .brand{font-weight:900;font-size:1.35rem;color:#fff;line-height:1.1;letter-spacing:.02em}
+.ftr .brand small{display:block;font-size:.82rem;font-weight:600;color:#c8d6ee;margin-top:8px;letter-spacing:0}
+.legal{border-top:1px solid rgba(255,255,255,.18)}
+.legal .wrap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:14px;font-size:.78rem;grid-template-columns:none}
+@media (max-width:820px){.ftr .wrap{grid-template-columns:1fr 1fr}}
+
+.back{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:30;display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--blue-ink);border:1.5px solid var(--blue);border-radius:999px;padding:9px 16px;font-weight:800;font-size:.84rem;text-decoration:none;box-shadow:0 8px 24px rgba(10,30,70,.18)}
+.back:hover{background:var(--blue-soft)}
+.toast{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;max-width:360px;background:var(--navy);color:#fff;border-radius:12px;padding:13px 16px;font-size:.9rem;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+[hidden]{display:none!important}
+
+/* Alto contraste */
+body.hc{--navy:#000;--blue:#ffe500;--blue-ink:#ffe500;--blue-soft:#222;--blue-line:#fff;--ink:#fff;--muted:#fff;--line:#fff;--bg:#000;--card:#000;--green:#7dff9b;--red:#ff6b75;--orange:#ffb35c;--green-soft:#000;--red-soft:#000;--orange-soft:#000}
+body.hc .hdr,body.hc .card,body.hc .search,body.hc .chip,body.hc .fld,body.hc .btn.out,body.hc .hcopy,body.hc .camp,body.hc .back,body.hc .proto{background:#000!important;color:#fff}
+body.hc .btn{color:#000}body.hc .btn.out{color:#ffe500}
+body.hc .logo{background:#fff;border-radius:8px;padding:2px 6px}
+body.hc .mhero{background:#000;border:2px solid #fff}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ---------- Padrão ba.gov.br (topo, rodapé e ajustes das imagens de referência) ---------- */
+.gov{text-transform:uppercase;font-size:.72rem}
+.gov .wrap{gap:22px;min-height:36px}
+.gname{display:inline-flex;align-items:center;gap:10px;letter-spacing:.03em}
+.bflag{display:inline-flex;flex-direction:column;width:20px;height:13px;border-radius:2px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.5)}
+.bflag i{flex:1;background:#fff}.bflag i:nth-child(1){background:#e3212f}.bflag i:nth-child(3){background:#0b4fc4}
+.gov .bar{width:1px;height:14px;background:rgba(255,255,255,.45)}
+.gov a,.gov button{font-weight:600}
+.hdr .wrap{gap:22px;min-height:74px}
+.nav{margin-left:28px;gap:4px}
+.nav>a,.nav>.dd>button{text-transform:none;font-size:1rem;font-weight:600;color:var(--ink);letter-spacing:0;padding:10px 14px}
+.nav>a:hover,.nav>.dd>button:hover{color:var(--blue-ink)}
+.dd .menu .path{font-size:.72rem;font-weight:800;color:var(--blue);background:var(--blue-soft);border-radius:6px;padding:2px 6px;min-width:84px;text-align:center}
+.hsearch{flex:1;max-width:360px;margin-left:auto;display:flex;align-items:center;background:#f1f3f6;border-radius:8px;padding:0 6px 0 14px;min-height:42px}
+.hsearch input{flex:1;min-width:0;border:0;background:transparent;outline:0;font-size:.9rem}
+.hsearch button{border:0;background:none;color:var(--blue);cursor:pointer;padding:8px;display:grid;place-items:center}
+.ccopy .btn{text-transform:none;font-size:.98rem;letter-spacing:0}
+.btn.entrar{text-transform:none;font-size:.98rem;font-weight:700;letter-spacing:0;padding:11px 18px;border-radius:6px}
+@media (max-width:1100px){.hsearch{display:none}}
+@media (max-width:980px){.entrar{display:none}.hdr.open .nav{margin-left:0}}
+
+/* Conselhos: cartões com contorno azul, como na referência */
+.con{border:2px solid var(--blue);box-shadow:none}
+.con .top{border-bottom:0}
+.acts{margin:0 14px;border-top:1px solid var(--line)}
+.short{border:1.5px solid var(--blue-line)}
+
+/* CICAN: destaque com imagem até a borda, faixa de informações e cartões compactos */
+.chero.full{border-radius:0;border:0;box-shadow:none;margin:0;grid-template-columns:1fr 1.1fr;background:#fff}
+.chero.full .ccopy{padding:36px 40px 56px max(20px,calc((100vw - 1240px)/2 + 20px))}
+.chero.full .cart{clip-path:polygon(9% 0,100% 0,100% 100%,0 100%);min-height:360px}
+.chero.full .crumb{padding-top:0}
+.facts.over{margin-top:-28px;position:relative;z-index:2;background:#f3f5f8}
+.svc.six{grid-template-columns:repeat(6,1fr);gap:12px}
+.svc.six .sv{flex-direction:column;gap:10px;padding:18px 16px;min-height:0}
+.svc.six .sv .ib{background:none;width:auto;height:auto;justify-content:start}
+.svc.six .sv .ib svg{width:44px;height:44px;stroke-width:1.4}
+.svc.six .sv .ar{text-align:right;margin-top:auto}
+.ncards.four{grid-template-columns:repeat(4,1fr)}
+.ncards.four .nc{flex-direction:column;gap:10px}
+.ncards.four .nc .ib{background:none;width:auto;height:auto;justify-content:start}
+.ncards.four .nc .ib svg{width:46px;height:46px;stroke-width:1.4}
+@media (max-width:1100px){.svc.six{grid-template-columns:repeat(3,1fr)}.ncards.four{grid-template-columns:1fr 1fr}}
+@media (max-width:900px){.chero.full{grid-template-columns:1fr}.chero.full .ccopy{padding:28px 20px 48px}.chero.full .cart{clip-path:none;min-height:220px}}
+@media (max-width:560px){.svc.six,.ncards.four{grid-template-columns:1fr}}
+
+/* Rodapé */
+.ftr .wrap{grid-template-columns:1.7fr 1fr 1fr 1fr 1.2fr}
+.fbrand{display:flex;gap:18px;align-items:flex-start}
+.gb{font-weight:900;font-size:.9rem;color:#fff;line-height:1;letter-spacing:.02em;padding-right:18px;border-right:1px solid rgba(255,255,255,.3)}
+.gb b{display:block;font-size:2.1rem;letter-spacing:.04em;margin-top:2px}
+.fsec b{display:block;color:#fff;font-size:.92rem}
+.fsec span{display:block;font-size:.85rem;margin-top:6px}
+.soc{display:flex;gap:10px;margin-top:14px}
+.soc a{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#fff;color:var(--navy);margin:0}
+.soc a svg{width:18px;height:18px}
+.app p{font-size:.82rem;margin:0 0 10px}
+.app .store{display:inline-flex;flex-direction:column;border:1px solid rgba(255,255,255,.7);border-radius:8px;padding:5px 12px;margin:0 8px 8px 0;color:#fff;font-weight:800;font-size:.95rem;line-height:1.1;background:#000}
+.app .store small{font-size:.6rem;font-weight:600;text-transform:uppercase}
+@media (max-width:1000px){.ftr .wrap{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="proto">Protótipo para avaliação · não é página oficial · <a href="index.html">voltar ao painel de redirecionamentos</a></div>
+
+<div class="gov"><div class="wrap">
+  <span class="gname"><span class="bflag" aria-hidden="true"><i></i><i></i><i></i></span>Governo do Estado da Bahia</span>
+  <span class="sp"></span>
+  <span class="fsz"><button type="button" data-fs="-1" aria-label="Diminuir fonte">A-</button><button type="button" data-fs="0" aria-label="Fonte padrão">A</button><button type="button" data-fs="1" aria-label="Aumentar fonte">A+</button></span>
+  <a class="hide-m" href="#" data-toast="Acesso à Informação: portal de transparência do Governo da Bahia.">Acesso à informação</a>
+  <a class="hide-m" href="#" data-toast="Portal da Transparência do Estado da Bahia.">Transparência</a>
+  <a class="hide-m" href="#" data-toast="Ouvidoria Geral do Estado.">Ouvidoria</a>
+  <span class="bar hide-m" aria-hidden="true"></span>
+  <button type="button" id="hcBtn" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg><span class="hide-m">Alto contraste</span></button>
+</div></div>
+
+<header class="hdr" id="hdr"><div class="wrap">
+  <a class="logo" href="multisites.html" aria-label="ba.gov.br – início"><img src="data:image/png;base64,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" alt="ba.gov.br" width="147" height="46"></a>
+  <nav class="nav" aria-label="Navegação principal">
+    <div class="dd" id="ddSrv"><button type="button" aria-expanded="false">Serviços <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="menu">
+        <a href="conselhos.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12"/><path d="M9 21v-6h6v6"/></svg>Conselhos e Registros Profissionais</a>
+        <a href="hemoba.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/></svg>Doação de sangue</a>
+        <a href="cican.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/></svg>Oncologia (CICAN)</a>
+      </div></div>
+    <div class="dd" id="ddOrg"><button type="button" aria-expanded="false">Órgãos <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="menu">
+        <a href="conselhos.html"><span class="path">/conselhos</span>Conselhos profissionais</a>
+        <a href="hemoba.html"><span class="path">/hemoba</span>Hemoba</a>
+        <a href="cican.html"><span class="path">/cican</span>CICAN</a>
+        <a class="ext" href="https://www.ba.gov.br/saeb" target="_blank" rel="noopener noreferrer"><span class="path">/saeb</span>SAEB (página real)</a>
+      </div></div>
+    <a href="#" data-toast="Notícias: integrar com o feed de notícias do órgão.">Notícias</a>
+    <a href="#" data-toast="Acessibilidade: use A-/A/A+ e Alto contraste no topo da página.">Acessibilidade</a>
+  </nav>
+  <form class="hsearch" role="search" onsubmit="event.preventDefault();toast('Busca do ba.gov.br: na versão real, pesquisaria serviços e órgãos.')"><input type="search" placeholder="O que você procura?" aria-label="O que você procura?"><button type="submit" aria-label="Buscar"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button></form>
+  <a class="btn sq entrar" href="#" data-toast="Entrar: login integrado ao ba.gov.br (gov.br / Conta Bahia)."><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M3 20c.8-3.6 3.6-6 7-6s6.2 2.4 7 6"/><path d="M17 9h4M19 7v4"/></svg>Entrar <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
+  <button class="burger" type="button" id="burger" aria-label="Abrir menu"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+</div></header>
+
+<main id="main" tabindex="-1"></main>
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="fbrand"><div class="gb">GOVERNO DO ESTADO<b>BAHIA</b></div><div class="fsec"><b>Governo do Estado da Bahia</b><span>Fundação de Hematologia e Hemoterapia da Bahia (Hemoba) · SESAB</span>
+      <div class="soc"><a href="#" aria-label="Rede social" data-toast="Redes sociais oficiais do órgão."><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8z"/></svg></a><a href="#" aria-label="Rede social" data-toast="Redes sociais oficiais do órgão."><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.5"/><circle cx="17" cy="7" r=".6"/></svg></a><a href="#" aria-label="Rede social" data-toast="Redes sociais oficiais do órgão."><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="4"/><path d="m10 9 5 3-5 3z"/></svg></a><a href="#" aria-label="Rede social" data-toast="Redes sociais oficiais do órgão."><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20"/></svg></a></div></div></div>
+    <div><h4>Serviços</h4><a href="conselhos.html">Conselhos profissionais</a><a href="hemoba.html">Doação de sangue</a><a href="cican.html">Oncologia (CICAN)</a></div>
+    <div><h4>Informações</h4><a href="#" data-toast="Carta de serviços do Governo da Bahia.">Carta de serviços</a><a href="#" data-toast="Perfil da Administração Pública: organização do Poder Executivo, organogramas e informações institucionais.">Perfil da Administração Pública</a><a href="#" data-toast="Direitos do cidadão.">Direitos do cidadão</a></div>
+    <div><h4>Ajuda</h4><a href="#" data-toast="Fale com a gente: canais de atendimento.">Fale com a gente</a><a href="#" data-toast="Ouvidoria Geral do Estado.">Ouvidoria</a><a href="index.html">Painel de redirecionamentos</a></div>
+    <div class="app"><h4>Aplicativo ba.gov.br</h4><p>Baixe o app e tenha os serviços na palma da mão.</p>
+      <a class="store" href="#" data-toast="Link da loja Google Play do app ba.gov.br."><small>Disponível no</small>Google Play</a><a class="store" href="#" data-toast="Link da App Store do app ba.gov.br."><small>Baixar na</small>App Store</a></div>
+  </div>
+  <div class="legal"><div class="wrap"><span>© Governo do Estado da Bahia · protótipo de padrão visual, não é página oficial.</span><span>Política de Privacidade · Termos de Uso · Mapa do Site</span></div></div>
+</footer>
+
+<a class="back" href="index.html"><svg class="i" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>Painel</a>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const PAGE="hemoba";
+/* ---------- Ícones (traço simples, padrão único) ---------- */
+const P = {
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  userSearch:'<circle cx="10" cy="8" r="4"/><path d="M3 20c0-3.5 3-6 7-6 1 0 2 .2 2.8.5"/><circle cx="17" cy="17" r="3"/><path d="m21.5 21.5-2.3-2.3"/>',
+  cert:'<path d="M6 3h9l4 4v8"/><path d="M6 3v18h7"/><path d="M9 8h6M9 12h6M9 16h2"/><circle cx="18" cy="18" r="2.6"/><path d="m16.6 20.2-.6 2.3 2-1 2 1-.6-2.3"/>',
+  money:'<circle cx="12" cy="12" r="9"/><path d="M15 9.2c-.6-.8-1.7-1.2-3-1.2-1.7 0-3 .8-3 2s1.3 1.7 3 2 3 .8 3 2-1.3 2-3 2c-1.3 0-2.4-.4-3-1.2M12 6.5v1.5M12 16v1.5"/>',
+  grid:'<rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/>',
+  gear:'<circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/><circle cx="12" cy="12" r="6.5"/>',
+  staff:'<path d="M12 3v18"/><circle cx="12" cy="4.5" r="1.5"/><path d="M8 8c0-1 1.8-1.5 4-1.5s4 .8 4 2-2 1.8-4 2.2-4 1-4 2.3 1.8 2 4 2 4 .6 4 1.8-1.8 1.7-4 1.7"/>',
+  nurse:'<path d="M10 3h4v4h4v4h-4v4h-4v-4H6V7h4z"/><path d="M4 15c1.5 3 4.5 5 8 5s6.5-2 8-5"/><path d="M8 21h8"/>',
+  tooth:'<path d="M7 3c-2.2 0-4 1.8-4 4.3 0 2.4 1 3.7 1.6 5.4.8 2.4 1 8.3 3.2 8.3 1.8 0 1.5-5 4.2-5s2.4 5 4.2 5c2.2 0 2.4-5.9 3.2-8.3.6-1.7 1.6-3 1.6-5.4C21 4.8 19.2 3 17 3c-2 0-3 1-5 1S9 3 7 3z"/>',
+  mortar:'<path d="M3 11h18c0 4.4-3.6 8-8 8h-2c-4.4 0-8-3.6-8-8z"/><path d="M8 21h8"/><path d="m13 11 6-8"/><path d="m17.3 2.6 2.4 1.8"/>',
+  calc:'<rect x="5" y="2.5" width="14" height="19" rx="2.5"/><rect x="8" y="5.5" width="8" height="3.5" rx=".8"/><path d="M8.5 13h.01M12 13h.01M15.5 13h.01M8.5 16.5h.01M12 16.5h.01M15.5 16.5h.01"/>',
+  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18M11 13v2h2v-2"/>',
+  hand:'<path d="m11 17 2 2a1.4 1.4 0 0 0 2-2"/><path d="m14 14 2.5 2.5a1.4 1.4 0 0 0 2-2l-3.9-3.9a2.1 2.1 0 0 0-3 0l-.9.9a1.4 1.4 0 0 1-2-2l2.8-2.8a3.8 3.8 0 0 1 5.3 0l2.4 2.4"/><path d="m21 3 1 11h-2M3 3 2 14l6.5 6.5a1.4 1.4 0 0 0 2-2M3 4h8"/>',
+  wrench:'<path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 6.6-6.6"/><path d="M14.7 6.3 13 4.6a4 4 0 0 0-5 5L3 14.6 6 17.6"/>',
+  pulse:'<path d="M3 12h4l2-5 4 10 2-5h6"/>',
+  dumbbell:'<path d="M6 7v10M3.5 9v6M18 7v10M20.5 9v6M6 12h12"/>',
+  doc:'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
+  flask:'<path d="M9 3h6M10 3v6l-5.5 9.5A1.7 1.7 0 0 0 6 21h12a1.7 1.7 0 0 0 1.5-2.5L14 9V3"/><path d="M7.5 15h9"/>',
+  scale:'<path d="M12 3v18M7 21h10M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
+  drop:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  cal:'<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"/>',
+  pin:'<path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/>',
+  building:'<rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h.01M12 7h.01M15 7h.01M9 11h.01M12 11h.01M15 11h.01M9 15h.01M15 15h.01M10.5 21v-4h3v4"/>',
+  heart:'<path d="M12 20s-7.5-4.6-9-9.3C1.9 7.3 4 4 7.3 4 9.5 4 11 5.3 12 6.8 13 5.3 14.5 4 16.7 4 20 4 22.1 7.3 21 10.7 19.5 15.4 12 20 12 20z"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6"/><circle cx="17" cy="9" r="2.6"/><path d="M16.5 14.2c2.8.3 5 2.4 5 5.8"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  chev:'<path d="m9 6 6 6-6 6"/>',
+  home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+  scan:'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+  magnet:'<path d="M6 3v8a6 6 0 0 0 12 0V3"/><path d="M6 7h4M14 7h4M10 3v8a2 2 0 0 0 4 0V3"/>',
+  iv:'<rect x="7" y="2.5" width="10" height="12" rx="2.5"/><path d="M7 7h4M7 10h4M12 14.5V18M10 18h4M12 18v3.5"/>',
+  steth:'<path d="M5 3v5a5 5 0 0 0 10 0V3"/><path d="M10 13v2a5 5 0 0 0 10 0v-2"/><circle cx="20" cy="11" r="2"/>',
+  scalpel:'<path d="M20 3 8.5 14.5l1 1L21 4z"/><path d="m8.5 14.5-5 6.5h4l3-4.5"/>',
+  bed:'<path d="M3 6v14M3 16h18v4M21 16v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="12" r="2"/>',
+  scope:'<path d="M6 21c0-4 3-4 3-8V6"/><circle cx="9" cy="4.5" r="1.5"/><path d="M9 9c4 0 7 1.5 7 5s-3 4-5 4"/><path d="M14 18l3 3"/>',
+  care:'<path d="M12 8.5s-3-3-5-1-.6 4.7 5 8.5c5.6-3.8 7-6.5 5-8.5s-5 1-5 1z"/><path d="M2 14l4 4h5M22 14l-4 4h-5"/>',
+  body:'<circle cx="12" cy="4.5" r="2"/><path d="M8 21l1-9-3-3M16 21l-1-9 3-3M9 8h6"/>',
+  star:'<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',
+  idcard:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 1.9-2.5 3.5-2.5s2.9.9 3.5 2.5M14.5 10h4M14.5 13.5h4"/>',
+  shield:'<path d="M12 3 4.5 6v6c0 4.5 3.2 7.6 7.5 9 4.3-1.4 7.5-4.5 7.5-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14.7-4M4 4v4h4M4 13a8 8 0 0 0 14.7 4M20 20v-4h-4"/>',
+  megaphone:'<path d="M3 11v3h3l7 4V7L6 11z"/><path d="M16 9a4 4 0 0 1 0 6M6 14l1.5 5h2.5l-1.3-4.6"/>'
+};
+const ic = (n,cls="i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[n]||""}</svg>`;
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const $ = s => document.querySelector(s);
+
+/* ---------- Dados dos conselhos (mesma base do painel) ---------- */
+const CONSELHOS = [
+  {id:"crea-ba",  sigla:"CREA-BA",  nome:"Conselho Regional de Engenharia e Agronomia da Bahia", cat:"engenharia", icon:"gear",  link:"https://www.creaba.org.br"},
+  {id:"cremeb",   sigla:"CREMEB",   nome:"Conselho Regional de Medicina do Estado da Bahia", cat:"saude", icon:"staff", link:"https://www.cremeb.org.br"},
+  {id:"coren-ba", sigla:"COREN-BA", nome:"Conselho Regional de Enfermagem da Bahia", cat:"saude", icon:"nurse", link:"https://www.coren-ba.gov.br"},
+  {id:"cro-ba",   sigla:"CRO-BA",   nome:"Conselho Regional de Odontologia do Estado da Bahia", cat:"saude", icon:"tooth", link:"https://www.croba.org.br"},
+  {id:"crf-ba",   sigla:"CRF-BA",   nome:"Conselho Regional de Farmácia do Estado da Bahia", cat:"saude", icon:"mortar", link:"https://www.crf-ba.org.br"},
+  {id:"crc-ba",   sigla:"CRC-BA",   nome:"Conselho Regional de Contabilidade do Estado da Bahia", cat:"contabilidade", icon:"calc", link:"https://www.crc-ba.org.br"},
+  {id:"cra-ba",   sigla:"CRA-BA",   nome:"Conselho Regional de Administração da Bahia", cat:"outras", icon:"brief", link:"https://www.cra-ba.org.br"},
+  {id:"core-ba",  sigla:"CORE-BA",  nome:"Conselho Regional dos Representantes Comerciais no Estado da Bahia", cat:"outras", icon:"hand", link:"https://corebahia.org.br/"},
+  {id:"crt-ba",   sigla:"CRT-BA",   nome:"Conselho Regional dos Técnicos Industriais da Bahia", cat:"engenharia", icon:"wrench", link:""},
+  {id:"crefito-7",sigla:"CREFITO-7",nome:"Conselho Regional de Fisioterapia e Terapia Ocupacional da 7ª Região", cat:"saude", icon:"pulse", link:"https://www.crefito7.gov.br"},
+  {id:"cref13",   sigla:"CREF13/BA",nome:"Conselho Regional de Educação Física da 13ª Região", cat:"saude", icon:"dumbbell", link:"https://www.cref13.org.br"},
+  {id:"crdd-ba",  sigla:"CRDD-BA",  nome:"Conselho Regional dos Despachantes Documentalistas", cat:"outras", icon:"doc", link:""},
+  {id:"crq-7",    sigla:"CRQ-7",    nome:"Conselho Regional de Química da 7ª Região", cat:"engenharia", icon:"flask", link:"https://www.crq7.org.br"},
+  {id:"oab-ba",   sigla:"OAB-BA",   nome:"Ordem dos Advogados do Brasil – Seção Bahia", cat:"outras", icon:"scale", link:"https://www.oab-ba.org.br"}
+];
+const CATS = [["todos","Todos"],["engenharia","Engenharia"],["saude","Saúde"],["contabilidade","Contabilidade"],["outras","Outras profissões"]];
+const ACOES = [["userSearch","Consultar registro"],["cert","Emitir certidão"],["money","Consultar débitos"],["grid","Acessar serviços"]];
+
+/* Link de saída: quando o conselho ainda não tem site cadastrado, mostra aviso */
+function outLink(c,label){
+  return c.link ? `href="${esc(c.link)}" target="_blank" rel="noopener noreferrer" title="${esc(label)} no site do ${esc(c.sigla)}"`
+                : `href="#" data-toast="Link do ${esc(c.sigla)} ainda não cadastrado no painel de redirecionamentos."`;
+}
+const crumb = items => `<nav class="crumb" aria-label="Você está em"><a href="multisites.html">${ic("home")} Início</a>${items.map(([t,h])=>` ${ic("chev")} ${h?`<a href="${h}">${esc(t)}</a>`:`<span>${esc(t)}</span>`}`).join("")}</nav>`;
+
+/* ---------- Páginas ---------- */
+function pgInicio(){
+  const sites=[
+    {h:"conselhos.html",ic:"building",bg:"#0b4fc4",t:"Conselhos e Registros Profissionais",d:"Página única que reúne os conselhos de classe da Bahia, com atalhos para registro, certidões e débitos."},
+    {h:"hemoba.html",ic:"drop",bg:"#d6202f",t:"Hemoba",d:"Estoque de sangue por tipo, agendamento de doação, unidades e campanhas."},
+    {h:"cican.html",ic:"steth",bg:"#178a45",t:"CICAN",d:"Centro Estadual de Oncologia: serviços, novos espaços e orientações de acesso."},
+  ];
+  return `<div class="wrap">
+    <section class="mhero"><div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
+      <h1>Multisites ba.gov.br</h1>
+      <p>Simulação de como ficariam as páginas dos órgãos dentro do multisites, todas no mesmo padrão visual do novo ba.gov.br.</p></section>
+    <section class="sec"><div class="sechead"><div><h2>Páginas simuladas</h2><p>Clique para abrir. Os ícones e botões funcionam como numa página real.</p></div>
+      <a class="tlink ext" href="https://www.ba.gov.br/saeb" target="_blank" rel="noopener noreferrer">Ver exemplo real: SAEB</a></div>
+      <div class="sites">${sites.map(s=>`<a class="card site" href="${s.h}"><span class="ic" style="background:${s.bg}">${ic(s.ic)}</span><h3>${s.t}</h3><p>${s.d}</p><span class="go">Abrir página ${ic("arrow")}</span></a>`).join("")}</div></section>
+    <section class="sec"><div class="sechead"><div><h2>O padrão único</h2><p>O que toda página de órgão no multisites repete.</p></div></div>
+      <div class="std">
+        <div class="card"><span class="n">1</span><b>Topo do governo</b><span>Barra azul com acessibilidade (fonte e alto contraste) e cabeçalho com a logo ba.gov.br.</span></div>
+        <div class="card"><span class="n">2</span><b>Destaque do órgão</b><span>Título, frase curta e até dois botões de ação principal.</span></div>
+        <div class="card"><span class="n">3</span><b>Serviços em cartões</b><span>Ícone de traço, nome, uma linha de descrição e link para a plataforma de origem.</span></div>
+        <div class="card"><span class="n">4</span><b>Aviso e rodapé</b><span>Aviso de redirecionamento para o sistema oficial e rodapé padrão do Governo.</span></div>
+      </div></section>
+  </div>`;
+}
+
+function pgConselhos(){
+  return `<div class="wrap">${crumb([["Serviços","multisites.html"],["Conselhos e Registros Profissionais"]])}
+    <div class="cgrid">
+      <div>
+        <h1 class="h1">Conselhos e Registros Profissionais</h1>
+        <p class="lead">Consulte serviços e registros dos conselhos profissionais da Bahia</p>
+        <label class="search" for="cq">${ic("search")}<span class="sr">Buscar</span><input id="cq" type="search" placeholder="Busque por conselho, profissão ou serviço" autocomplete="off"></label>
+        <div class="chips" role="group" aria-label="Filtrar por área">${CATS.map(([k,t],i)=>`<button type="button" class="chip" data-cat="${k}" aria-pressed="${i===0}">${t}</button>`).join("")}</div>
+      </div>
+      <aside class="side"><h2>Atalhos em destaque</h2>
+        <a class="card short" href="#" data-toast="Consulta de registro: escolha o conselho na lista e use o botão “Consultar registro”."><span class="ib">${ic("idcard")}</span><b>Consultar registro profissional</b>${ic("chev")}</a>
+        <a class="card short" href="#" data-toast="Certidões: cada conselho emite a sua. Use o botão “Emitir certidão” no cartão do conselho."><span class="ib o">${ic("cert")}</span><b>Certidões profissionais</b>${ic("chev")}</a>
+      </aside>
+    </div>
+    <div class="cons" id="cons"></div>
+    <div class="notice">${ic("info")}<span>Os serviços disponíveis podem direcionar você para os sistemas oficiais de cada conselho profissional para conclusão da solicitação ou emissão de documentos.</span></div>
+  </div>`;
+}
+function renderCons(){
+  const box=$("#cons"); if(!box) return;
+  const q=($("#cq").value||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  const cat=(document.querySelector(".chip[aria-pressed=true]")||{}).dataset?.cat||"todos";
+  const list=CONSELHOS.filter(c=>(cat==="todos"||c.cat===cat) && (!q || (c.sigla+" "+c.nome+" "+c.cat).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().includes(q)));
+  box.innerHTML = list.length ? list.map(c=>`<article class="card con">
+      <a class="top" ${outLink(c,"Site oficial")}>${ic(c.icon)}<div><h3>${esc(c.sigla)}</h3><p>${esc(c.nome)}</p></div></a>
+      <div class="acts">${ACOES.map(([i,t])=>`<a ${outLink(c,t)}>${ic(i)}${t.replace(" ","<br>")}</a>`).join("")}</div>
+    </article>`).join("") : `<p class="empty">Nenhum conselho encontrado. Tente outro termo.</p>`;
+}
+
+function pgConselho(id){
+  const c=CONSELHOS.find(x=>x.id===id); if(!c) return pgConselhos();
+  const svs=[
+    ["userSearch","Consultar registro profissional","Verifique a situação de inscrição de um profissional ou empresa."],
+    ["cert","Emitir certidão de regularidade","Gere a certidão de registro e quitação para apresentar a contratantes."],
+    ["money","Consultar débitos e anuidade","Veja anuidades em aberto e emita o boleto para pagamento."],
+    ["idcard","Inscrição e registro","Solicite o registro profissional, provisório ou definitivo."],
+    ["refresh","Atualizar cadastro","Altere endereço, contatos e dados profissionais."],
+    ["megaphone","Denúncia e fiscalização","Informe exercício ilegal da profissão ou irregularidades."]
+  ];
+  return `<div class="wrap">${crumb([["Serviços","multisites.html"],["Conselhos e Registros Profissionais","conselhos.html"],[c.sigla]])}
+    <section class="card ohero"><span class="big">${ic(c.icon)}</span>
+      <div><p class="eyebrow">Conselho profissional · Bahia</p><h1>${esc(c.sigla)}</h1><p>${esc(c.nome)}</p></div>
+      <a class="btn sq" ${outLink(c,"Acessar")}>Acessar site oficial ${ic("arrow")}</a></section>
+    <section class="sec"><div class="sechead"><div><h2>Serviços</h2><p>Você será direcionado para o sistema oficial do ${esc(c.sigla)}.</p></div><a class="tlink" href="conselhos.html">${ic("chev")} Ver todos os conselhos</a></div>
+      <div class="svc">${svs.map(([i,t,d])=>`<a class="card sv" ${outLink(c,t)}><span class="ib">${ic(i)}</span><div><h3>${t}</h3><p>${d}</p><div class="ar">Acessar ${ic("arrow")}</div></div></a>`).join("")}</div></section>
+    <section class="sec two">
+      <div class="card panel"><h3>Antes de solicitar</h3><ul><li>Tenha em mãos CPF e número de registro, quando houver.</li><li>Alguns serviços exigem login no portal do conselho.</li><li>Prazos e taxas são definidos pelo próprio conselho.</li></ul></div>
+      <div class="card panel"><h3>Atendimento</h3><p>Dúvidas sobre registro, anuidade ou fiscalização são atendidas pelos canais do ${esc(c.sigla)}.</p><a class="btn out sq" ${outLink(c,"Contato")}>Canais de atendimento</a></div>
+    </section>
+    <div class="notice">${ic("info")}<span>Esta página faz parte do multisites ba.gov.br. A conclusão dos serviços acontece no sistema oficial do conselho.</span></div>
+  </div>`;
+}
+
+function pgHemoba(){
+  const tipos=[["O+",624,62],["O-",214,43],["A+",532,58],["A-",156,39],["B+",398,33],["B-",98,18],["AB+",472,60],["AB-",83,16]];
+  const lv=p=>p>=50?["ok","Adequado"]:p>=30?["at",p>=35?"Atenção":"Estoque baixo"]:["cr","Crítico"];
+  const tot=tipos.reduce((a,t)=>a+t[1],0);
+  return `<div class="wrap">
+    <section class="hhero">
+      <div class="card hcopy"><h1>Doe sangue, salve vidas.</h1><div class="sub">Um gesto simples que transforma histórias.</div>
+        <p>Sua doação pode salvar até 4 vidas.<br>Seja um doador regular e faça a diferença todos os dias.</p>
+        <div class="acts2"><a class="btn sq" href="#agendar">${ic("drop")} Quero doar</a><a class="btn out sq" href="#agendar">${ic("cal")} Agendar doação</a></div>
+        ${ic("drop","drop")}</div>
+      <div class="card stock"><div class="hd"><h2>Estoque de sangue na Bahia</h2><span class="live">Atualizado agora</span></div>
+        <div class="sbody">
+          <div class="light st-estavel" role="img" aria-label="Semáforo do estoque: verde, estável"><i class="r"></i><i class="y"></i><i class="g"></i></div>
+          <div class="sit"><small>Situação geral</small><strong>ESTÁVEL</strong><span>Continue doando!</span></div>
+          <div class="kpis">
+            <div class="kpi"><small>${ic("drop")}Bolsas em estoque</small><b>${tot.toLocaleString("pt-BR")}</b></div>
+            <div class="kpi"><small>${ic("users")}Doações hoje</small><b>186</b></div>
+            <div class="kpi"><small>${ic("heart")}Vidas salvas hoje</small><b>744</b></div>
+            <div class="kpi"><small>${ic("building")}Unidades no estado</small><b>29</b></div>
+          </div>
+        </div></div>
+    </section>
+    <section class="card types sec"><div class="hd"><h2>Estoque por tipo sanguíneo</h2><a class="tlink" href="#" data-toast="Página explicando os tipos sanguíneos e compatibilidade.">Saiba mais sobre os tipos sanguíneos ${ic("info")}</a></div>
+      <div class="tgrid">${tipos.map(([g,q,p])=>{const [k,t]=lv(p);return `<div class="tp lv-${k}"><div class="g">${g}</div><div class="q">${q} bolsas</div><span class="st">${t}</span><div class="bar"><i style="width:${p}%"></i></div><div class="pc">${p}%</div></div>`}).join("")}</div>
+      <p class="illus">Números ilustrativos para o protótipo. Na versão real, viriam do sistema do Hemoba.</p></section>
+    <section class="three sec" id="agendar">
+      <div class="card panel"><h3>Agende sua doação</h3><p>Encontre a unidade mais próxima e escolha o melhor horário.</p>
+        <label class="fld" for="hcity">${ic("pin")}<span class="sr">Cidade</span><select id="hcity"><option value="">Selecione sua cidade</option><option>Salvador</option><option>Feira de Santana</option><option>Vitória da Conquista</option><option>Itabuna</option><option>Juazeiro</option><option>Barreiras</option></select></label>
+        <label class="fld" for="hdate">${ic("cal")}<span class="sr">Data</span><input id="hdate" type="date"></label>
+        <button class="btn sq" type="button" id="hgo" style="width:100%">${ic("cal")} Ver horários disponíveis</button></div>
+      <div class="card panel"><h3>Unidades do Hemoba na Bahia</h3><p>Encontre a unidade mais próxima de você.</p>
+        <ul class="ul2"><li>${ic("home")}22 unidades fixas</li><li>${ic("cal")}07 unidades de coleta</li><li>${ic("users")}Atendimento em todo o estado</li><li>${ic("clock")}Horários ampliados</li></ul>
+        <a class="btn out sq" href="#" data-toast="Lista de unidades com endereço e horário (integração com o Hemoba)." style="width:100%">Ver todas as unidades</a></div>
+      <div class="card panel"><h3>Campanhas e informações</h3><p>Participe das campanhas e incentive mais pessoas a doarem.</p>
+        <a class="camp" href="#" data-toast="Junho Vermelho: campanha de incentivo à doação regular.">${ic("drop","ci")}<div><b>Junho Vermelho</b><span>Seja um doador regular. Doe sangue, doe vida!</span></div><span class="ch">${ic("chev")}</span></a>
+        <a class="camp y" href="#" data-toast="Programa Amigo Doador: indique amigos e acompanhe sua pontuação.">${ic("users","ci")}<div><b>Indique um amigo</b><span>Convide amigos e ganhe pontos no Programa Amigo Doador.</span></div><span class="ch">${ic("chev")}</span></a></div>
+    </section>
+    <section class="card nums sec">
+      <div class="num"><span class="ci r">${ic("heart")}</span><div><b>1.245.789</b><span>Vidas salvas em 2024</span></div></div>
+      <div class="num"><span class="ci">${ic("users")}</span><div><b>312.456</b><span>Doações em 2024</span></div></div>
+      <div class="num"><span class="ci r">${ic("drop")}</span><div><b>${tot.toLocaleString("pt-BR")}</b><span>Bolsas em estoque agora</span></div></div>
+      <div class="num"><span class="ci">${ic("building")}</span><div><b>29</b><span>Unidades no estado</span></div></div>
+      <div class="num"><span class="ci">${ic("users")}</span><div><b>+1.200</b><span>Doadores hoje</span></div></div>
+    </section>
+    <div class="notice">${ic("info")}<span><b>Disque Sangue: 0800 071 6500.</b> Os números desta página são ilustrativos. A versão no multisites deve buscar o estoque real no sistema do Hemoba.</span></div>
+  </div>`;
+}
+
+function pgCican(){
+  const svs=[["scan","PET-CT","Exames de diagnóstico por imagem de alta precisão."],["magnet","Ressonância magnética","Exames avançados com mais conforto e segurança."],["iv","Quimioterapia","Tratamentos oncológicos com estrutura renovada e humanizada."],["steth","Consultas especializadas","Equipe multiprofissional focada no cuidado integral do paciente."],["scalpel","Cirurgias oncológicas","Salas cirúrgicas modernas e equipe especializada."],["tooth","Odontologia oncológica","Prevenção e tratamento para pacientes em tratamento oncológico."]];
+  const novos=[["bed","Hospital-dia","Mais conforto e agilidade em procedimentos e tratamentos que não exigem internação."],["scope","Colonoscopia e endoscopia","Diagnóstico mais preciso com novos equipamentos."],["care","Cuidados paliativos","Acolhimento e qualidade de vida em todas as fases do cuidado."],["body","Cirurgia reparadora","Reconstrução e autoestima, apoiando a jornada do paciente."]];
+  return `<section class="card chero full">
+      <div class="ccopy">${crumb([["Saúde","multisites.html"],["CICAN"]])}<h1>CICAN renovado:<br><span>mais cuidado, diagnóstico e acolhimento</span></h1>
+        <div class="flag" aria-hidden="true"><i></i><i></i><i></i></div>
+        <p>Conheça os serviços do Centro Estadual de Oncologia da Bahia, em Salvador.</p>
+        <div class="acts2"><a class="btn sq" href="#cican-servicos">Consultar serviços ${ic("arrow")}</a><a class="btn out sq" href="#cican-acesso">Como chegar ${ic("pin")}</a></div></div>
+      <div class="cart" role="img" aria-label="Ilustração do CICAN">
+        <svg class="scene" viewBox="0 0 600 360" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect x="0" y="250" width="600" height="110" fill="#8fb4cc"/>
+          <rect x="40" y="70" width="210" height="190" rx="8" fill="#eef5fb"/><rect x="60" y="92" width="70" height="60" rx="4" fill="#c4dcec"/><rect x="150" y="92" width="80" height="60" rx="4" fill="#c4dcec"/>
+          <rect x="60" y="170" width="170" height="70" rx="4" fill="#d7e7f2"/>
+          <circle cx="430" cy="150" r="80" fill="#ffffff" opacity=".55"/>
+          <path d="M405 120h50v30h30v50h-30v30h-50v-30h-30v-50h30z" fill="#178a45" opacity=".9"/>
+          <rect x="300" y="262" width="250" height="16" rx="8" fill="#6d97b4"/>
+          <circle cx="345" cy="222" r="22" fill="#3c5a74"/><rect x="325" y="246" width="40" height="40" rx="14" fill="#3c5a74"/>
+          <circle cx="505" cy="216" r="22" fill="#e9eef3"/><rect x="483" y="240" width="44" height="46" rx="14" fill="#ffffff"/><rect x="497" y="250" width="16" height="6" rx="2" fill="#0b4fc4"/>
+        </svg>
+        <div class="wm"><b>CICAN</b><span>Centro Estadual<br>de Oncologia da Bahia</span></div>
+        <div class="lbl">CICAN · Centro Estadual de Oncologia da Bahia</div>
+      </div>
+    </section><div class="wrap">
+    <section class="card facts over">
+      <div class="fact">${ic("pin")}<div><b>Brotas, Salvador</b><span>Confirme endereço e acesso nos canais oficiais.</span></div></div>
+      <div class="fact">${ic("clock")}<div><b>Atendimento: consulte sua unidade</b><span>Horários e fluxos podem variar.</span></div></div>
+      <div class="fact">${ic("info")}<div><b>Atendimento conforme encaminhamento</b><span>E critérios da unidade.</span></div></div>
+    </section>
+    <section class="sec" id="cican-servicos"><div class="sechead"><div><h2>Serviços em destaque</h2><p>Informações sobre exames, tratamentos e atendimento especializado.</p></div><a class="tlink" href="#cican-acesso">Ver orientações ${ic("arrow")}</a></div>
+      <div class="svc six">${svs.map(([i,t,d])=>`<a class="card sv" href="#cican-acesso"><span class="ib">${ic(i)}</span><div><h3>${t}</h3><p>${d}</p><div class="ar">Saiba mais ${ic("arrow")}</div></div></a>`).join("")}</div></section>
+    <section class="sec"><div class="sechead"><div><h2>Novos espaços e especialidades</h2><p>Melhorias da reinauguração.</p></div></div>
+      <div class="ncards four">${novos.map(([i,t,d])=>`<article class="card nc"><span class="ib">${ic(i)}</span><div><h3>${t} <span class="tag">Novo</span></h3><p>${d}</p></div></article>`).join("")}</div></section>
+    <div class="notice">${ic("info")}<span><b>Serviços sujeitos à disponibilidade e regulação.</b> Informe-se na sua unidade de referência e consulte os canais oficiais do CICAN/SESAB antes de se deslocar.</span></div>
+    <section class="sec two" id="cican-acesso">
+      <div class="card panel"><h3>Como acessar o atendimento</h3><p>Antes de ir à unidade, confira as informações do seu encaminhamento.</p><ul><li>Verifique se o serviço exige encaminhamento.</li><li>Confirme documentos e exames anteriores necessários.</li><li>Consulte data, horário e preparo, quando aplicável.</li></ul><a class="btn sq" href="#" data-toast="Adicionar aqui o link oficial de regulação ou agendamento, após validação pela SESAB.">Consultar canais oficiais ${ic("arrow")}</a></div>
+      <div class="card panel"><h3>Localização e contato</h3><p><b>CICAN – Centro Estadual de Oncologia da Bahia</b></p><p>Brotas, Salvador – Bahia. Endereço, telefone e horários devem ser validados com a SESAB antes da publicação.</p><a class="btn out sq" href="#" data-toast="Mapa e rotas: integrar com o endereço oficial da unidade.">Ver no mapa ${ic("pin")}</a></div>
+    </section>
+  </div>`;
+}
+
+/* ---------- Roteamento por âncora ---------- */
+function route(){
+  const page=PAGE;
+  document.body.dataset.page=page;
+  $("#main").innerHTML=({inicio:pgInicio,conselhos:pgConselhos,hemoba:pgHemoba,cican:pgCican})[page]();
+  if(page==="conselhos") renderCons();
+  if(location.hash){const el=document.getElementById(location.hash.slice(1)); el&&el.scrollIntoView();}
+}
+
+/* ---------- Interações ---------- */
+function toast(m){const t=$("#toast"); t.textContent=m; t.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>t.hidden=true,4200);}
+document.addEventListener("click",e=>{
+  const tl=e.target.closest("[data-toast]"); if(tl){e.preventDefault(); toast(tl.dataset.toast); return;}
+  const ch=e.target.closest(".chip"); if(ch){document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===ch)); renderCons(); return;}
+  const dd=e.target.closest(".dd>button"); document.querySelectorAll(".dd").forEach(x=>{if(!dd||x!==dd.parentNode) x.classList.remove("open")}); if(dd){const o=dd.parentNode.classList.toggle("open"); dd.setAttribute("aria-expanded",o); return;}
+  if(e.target.closest("#burger")){$("#hdr").classList.toggle("open"); return;}
+  if(e.target.closest("#hgo")){const c=$("#hcity").value, d=$("#hdate").value; if(!c){toast("Selecione sua cidade para ver os horários."); return;} toast(`Horários em ${c}${d?" para "+d.split("-").reverse().join("/"):""}: na versão real, abriria o agendamento do Hemoba.`); return;}
+  const fs=e.target.closest("[data-fs]"); if(fs){const v=+fs.dataset.fs; const cur=parseFloat(getComputedStyle(document.documentElement).fontSize); const n=v===0?16:Math.max(13,Math.min(20,cur+v)); document.documentElement.style.setProperty("--fs",n+"px"); try{localStorage.setItem("ms-fs",n)}catch(x){} return;}
+  if(e.target.closest("#hcBtn")){const on=document.body.classList.toggle("hc"); $("#hcBtn").setAttribute("aria-pressed",on); try{localStorage.setItem("ms-hc",on?"1":"")}catch(x){} return;}
+});
+document.addEventListener("input",e=>{ if(e.target.id==="cq") renderCons(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") document.querySelectorAll(".dd").forEach(x=>x.classList.remove("open")); });
+try{const f=localStorage.getItem("ms-fs"); if(f) document.documentElement.style.setProperty("--fs",f+"px"); if(localStorage.getItem("ms-hc")){document.body.classList.add("hc"); $("#hcBtn").setAttribute("aria-pressed","true");}}catch(x){}
+route();
+</script>
+</body>
+</html>
