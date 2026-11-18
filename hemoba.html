@@ -340,6 +340,137 @@ body.hc .mhero{background:#000;border:2px solid #fff}
 .app .store{display:inline-flex;flex-direction:column;border:1px solid rgba(255,255,255,.7);border-radius:8px;padding:5px 12px;margin:0 8px 8px 0;color:#fff;font-weight:800;font-size:.95rem;line-height:1.1;background:#000}
 .app .store small{font-size:.6rem;font-weight:600;text-transform:uppercase}
 @media (max-width:1000px){.ftr .wrap{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
+/* ---------- Capa do ba.gov.br (Govinho) ---------- */
+body[data-page="inicio"]{background:#f3f5f9}
+.hdr .nav.hnav{margin-left:auto;margin-right:auto;gap:18px}
+.hnav>a,.hnav>.dd>button{font-size:1.02rem;font-weight:600;color:var(--ink);padding:24px 6px;border-radius:0;border-bottom:3px solid transparent}
+.hnav>a.on{color:var(--blue-ink);border-bottom-color:var(--blue)}
+.hnav>a:hover,.hnav>.dd>button:hover{background:none;color:var(--blue-ink)}
+.huser{display:flex;align-items:center;gap:16px;margin-left:auto}
+.bell{position:relative;background:none;border:0;cursor:pointer;color:var(--ink);padding:6px;display:grid;place-items:center}
+.bell svg{width:28px;height:28px}
+.bell em{position:absolute;top:0;right:0;background:var(--red);color:#fff;font-style:normal;font-size:.68rem;font-weight:800;border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center}
+.bellm{position:absolute;right:0;top:calc(100% + 8px);width:300px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 14px 40px rgba(10,30,70,.16);padding:8px;z-index:30}
+.bellm a{display:block;padding:10px;border-radius:8px;text-decoration:none;font-size:.88rem}
+.bellm a:hover{background:var(--blue-soft)}
+.bellm b{display:block;color:var(--ink)}
+.bellm small{color:var(--muted)}
+.bwrap{position:relative}
+.who2{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem}
+.who2 img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.sair{background:none;border:0;color:var(--blue-ink);font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;font-size:.98rem}
+@media (max-width:980px){.huser .who2 span,.sair{display:none}}
+.home{max-width:1500px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-left,0px)) 10px;display:grid;grid-template-columns:230px minmax(0,1fr) 370px;gap:18px;align-items:start}
+.hside,.rc{background:#fff;border:1px solid var(--line);border-radius:14px}
+.hside{padding:10px 12px 12px;position:sticky;top:96px}
+.hs{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:9px;text-decoration:none;color:var(--ink);font-size:.95rem}
+.hs svg{width:20px;height:20px;color:#5a6577}
+.hs:hover{background:var(--blue-soft)}
+.hs.on{color:var(--blue-ink)}.hs.on svg{color:var(--blue)}
+.hs b{font-size:1.02rem}
+.hs:first-child{border-bottom:1px solid var(--line);border-radius:9px 9px 0 0;padding-bottom:12px;margin-bottom:6px}
+.hs span{flex:1}
+.hs em{font-style:normal;background:var(--red);color:#fff;font-size:.7rem;font-weight:800;border-radius:999px;min-width:20px;height:20px;display:grid;place-items:center}
+.hcap{margin:14px 10px 6px;font-size:.7rem;font-weight:800;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.help{display:flex;align-items:flex-end;gap:4px;margin-top:16px;background:#eef3fb;border-radius:12px;padding:12px 0 0 12px;text-decoration:none;overflow:hidden}
+.help div{flex:1;padding-bottom:12px}
+.help small{display:block;font-size:.72rem;color:var(--muted)}
+.help b{display:block;color:var(--blue-ink);font-size:.95rem}
+.help span{display:block;font-size:.66rem;color:var(--blue)}
+.help i{display:block;font-style:normal;font-size:.64rem;color:var(--green);margin-top:4px}
+.help img{width:84px;height:auto;display:block}
+.ghero{position:relative;background:#011e4a;color:#fff;border-radius:16px;overflow:hidden;min-height:292px;display:flex}
+.gtxt{position:relative;z-index:2;padding:30px 0 22px 44px;max-width:62%}
+.ghero h1{margin:0;font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700;line-height:1.15}
+.ghero h1 span{color:#f5b724;font-weight:900;font-size:1.4em}
+.ghero p{margin:4px 0 0;opacity:.9}
+.ghero h2{margin:26px 0 12px;font-size:1.25rem;font-weight:600}
+.gsearch{display:flex;align-items:center;gap:10px;background:#fff;border-radius:10px;padding:8px 8px 8px 16px;color:var(--ink)}
+.gsearch>svg{color:var(--muted);width:22px;height:22px}
+.gsearch input{flex:1;min-width:0;border:0;outline:0;font-size:.95rem}
+.gsearch button{background:var(--blue);color:#fff;border:0;border-radius:8px;width:36px;height:36px;display:grid;place-items:center;cursor:pointer}
+.gchips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.gchip{background:transparent;border:1px solid rgba(255,255,255,.6);color:#fff;border-radius:999px;padding:5px 10px;font-size:.74rem;font-weight:600;cursor:pointer}
+.gchip:hover{background:rgba(255,255,255,.14)}
+.bubble{position:absolute;z-index:3;left:62%;top:44px;width:158px;background:#fff;color:var(--ink);border-radius:14px;padding:14px;font-size:.74rem;line-height:1.35;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.bubble::after{content:"";position:absolute;right:-9px;top:72px;border:9px solid transparent;border-left-color:#fff;border-right:0}
+.bubble b{display:block;margin-bottom:8px;font-size:.78rem}
+.gimg{position:absolute;right:0;bottom:0;height:100%;max-height:300px;width:auto}
+.hsec{margin-top:24px}
+.hhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:12px}
+.hhead h2{margin:0;font-size:1.3rem;font-weight:700;color:var(--blue-ink)}
+.hhead a{color:var(--blue);font-size:.86rem;text-decoration:none;font-weight:600}
+.hhead a:hover{text-decoration:underline}
+.carw{position:relative}
+.car{display:grid;grid-auto-flow:column;grid-auto-columns:calc((100% - 48px)/5);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:2px}
+.car::-webkit-scrollbar{display:none}
+.dcard{scroll-snap-align:start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 12px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;text-decoration:none;color:var(--ink);transition:box-shadow .15s,transform .15s}
+.dcard:hover{box-shadow:0 10px 24px rgba(12,40,90,.12);transform:translateY(-2px)}
+.dic{width:50px;height:50px;border-radius:12px;color:#fff;display:grid;place-items:center}
+.dic svg{width:28px;height:28px}
+.dcard b{font-size:.84rem;line-height:1.3;flex:1;margin-top:4px}
+.dcard small{font-size:.72rem;color:var(--muted);text-transform:uppercase}
+.dm{display:flex;justify-content:space-between;width:100%;font-size:.76rem;color:var(--muted);align-items:center;gap:4px;margin-top:4px}
+.dm svg{width:14px;height:14px}
+.dm em{font-style:normal;font-weight:700;color:var(--ink);margin-left:auto}
+.carbtn{position:absolute;right:-14px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:#fff;border:1px solid var(--line);box-shadow:0 4px 12px rgba(0,0,0,.12);display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.objs{display:grid;grid-template-columns:repeat(7,1fr);gap:12px}
+.obj{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 8px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;font-size:.82rem;text-decoration:none;color:var(--ink);min-height:104px}
+.obj svg{width:34px;height:34px;color:#4b5565;stroke-width:1.5}
+.obj:hover{border-color:var(--blue);color:var(--blue-ink)}
+.news{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.nw{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;text-decoration:none;color:var(--ink);display:flex;flex-direction:column}
+.nw img{width:100%;aspect-ratio:202/83;object-fit:cover;display:block}
+.nw b{font-size:.8rem;font-weight:600;line-height:1.3;padding:8px 10px 4px}
+.nw small{font-size:.72rem;color:var(--muted);padding:0 10px 10px}
+.nw:hover b{color:var(--blue-ink)}
+.hright{display:flex;flex-direction:column;gap:14px}
+.rc{padding:16px}
+.rc .hhead h2{font-size:1.1rem;color:var(--ink)}
+.vp{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.vp:first-of-type{border-top:0}
+.vic{width:36px;height:36px;border-radius:9px;background:var(--blue-soft);color:var(--blue);display:grid;place-items:center;flex:none}
+.vic.g{background:var(--green-soft);color:var(--green)}
+.vp>span:nth-child(2){flex:1}
+.vp b,.dc b{display:block;font-size:.92rem;font-weight:600}
+.vp small,.dc small{display:block;font-size:.78rem;color:var(--muted)}
+.bd{font-style:normal;font-size:.72rem;font-weight:600;border-radius:999px;padding:3px 9px;white-space:nowrap}
+.bd.r{background:#fdecee;color:#c8102e}.bd.o{background:#fff2e3;color:#d26a00}.bd.b{background:var(--blue-soft);color:var(--blue-ink)}.bd.g{background:var(--green-soft);color:#11683a}
+.rc.soft{background:#eef3fb;border-color:#dbe5f4}
+.rc.soft .hhead h2{color:var(--blue-ink)}
+.req{background:#fff;border-radius:10px;padding:14px;border:1px solid var(--line)}
+.rq1{display:flex;justify-content:space-between;align-items:center}
+.req>small{color:var(--muted);font-size:.82rem}
+.steps{list-style:none;padding:0;margin:16px 0 0;display:grid;grid-template-columns:repeat(4,1fr);font-size:.74rem;color:var(--muted)}
+.steps li{position:relative;padding-top:22px}
+.steps li i{position:absolute;top:0;left:8px;width:16px;height:16px;border-radius:50%;border:2px solid #b8c2d1;background:#fff;z-index:1}
+.steps li::before{content:"";position:absolute;top:7px;left:16px;right:-16px;height:3px;background:#d6dde8}
+.steps li:last-child::before{display:none}
+.steps li.ok i{background:var(--green);border-color:var(--green)}
+.steps li.ok::before{background:var(--green)}
+.steps li.now i{background:var(--blue);border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.steps small{display:block}
+.rc.navy{background:#0b3a8f;border:0;color:#fff}
+.rc.navy .hhead h2{color:#fff}.rc.navy .hhead a{color:#cfe0ff}
+.dc{display:flex;align-items:center;gap:12px;background:#fff;color:var(--ink);border-radius:8px;padding:10px 12px;margin-bottom:8px;text-decoration:none}
+.dc>svg{color:var(--blue);width:22px;height:22px}
+.dc:hover{box-shadow:0 0 0 2px #7fb0ff}
+.addoc{display:flex;justify-content:center;align-items:center;gap:8px;background:#1557d6;color:#fff;border-radius:8px;padding:11px;margin-top:4px;text-decoration:none;font-weight:600}
+.addoc:hover{background:#1b63ee}
+@media (max-width:1280px){.home{grid-template-columns:220px minmax(0,1fr)}.hright{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr)}.car{grid-auto-columns:calc((100% - 36px)/4)}}
+@media (max-width:980px){.home{grid-template-columns:minmax(0,1fr)}.hside{display:none}.hright{grid-template-columns:1fr}.objs{grid-template-columns:repeat(4,1fr)}.news{grid-template-columns:1fr 1fr}.car{grid-auto-columns:calc((100% - 12px)/2.3)}.carbtn{right:-6px}}
+@media (max-width:640px){.gtxt{max-width:none;padding:24px 20px}.bubble,.gimg{display:none}.objs{grid-template-columns:repeat(2,1fr)}.news{grid-template-columns:1fr}}
+body.hc .hside,body.hc .rc,body.hc .dcard,body.hc .obj,body.hc .nw,body.hc .req,body.hc .dc,body.hc .ghero{background:#000!important;color:#fff;border-color:#fff}
+
+.orgs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.org{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid var(--blue-line);border-radius:12px;padding:14px;text-decoration:none;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+.org:hover{border-color:var(--blue);box-shadow:0 10px 24px rgba(12,40,90,.12)}
+.org>span:nth-child(2){flex:1;min-width:0}
+.org b{display:block;color:var(--blue-ink);font-size:1rem}
+.org small{display:block;color:var(--muted);font-size:.8rem;line-height:1.35;margin:2px 0 4px}
+.org em{font-style:normal;font-size:.72rem;font-weight:800;color:var(--blue);background:var(--blue-soft);border-radius:6px;padding:2px 6px}
+.org>svg{color:var(--blue);flex:none}
+@media (max-width:1100px){.orgs{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -480,27 +611,121 @@ const crumb = items => `<nav class="crumb" aria-label="Você está em"><a href="
 
 /* ---------- Páginas ---------- */
 function pgInicio(){
-  const sites=[
-    {h:"conselhos.html",ic:"building",bg:"#0b4fc4",t:"Conselhos e Registros Profissionais",d:"Página única que reúne os conselhos de classe da Bahia, com atalhos para registro, certidões e débitos."},
-    {h:"hemoba.html",ic:"drop",bg:"#d6202f",t:"Hemoba",d:"Estoque de sangue por tipo, agendamento de doação, unidades e campanhas."},
-    {h:"cican.html",ic:"steth",bg:"#178a45",t:"CICAN",d:"Centro Estadual de Oncologia: serviços, novos espaços e orientações de acesso."},
+  const sv = (d,cls="i") => `<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+  const Q = {
+    home:'<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+    alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>',
+    doc:'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
+    list:'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+    cal:'<rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',
+    star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+    car:'<path d="M5 16V11l2-5h10l2 5v5"/><path d="M3 16h18M7 19v-3M17 19v-3M5 11h14"/>',
+    shop:'<path d="M4 10V20h16V10M3 6h18l-1 4H4z"/><path d="M9 20v-5h6v5"/>',
+    grad:'<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5"/>',
+    users:'<circle cx="9" cy="8" r="3.5"/><path d="M3 20c.6-3.4 3-5.5 6-5.5s5.4 2.1 6 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.6c2.6.2 4.4 2.1 5 5.4"/>',
+    leaf:'<path d="M5 19c0-8 6-14 15-14 0 9-6 15-14 15"/><path d="M5 19 13 11"/>',
+    family:'<circle cx="8" cy="6" r="2.5"/><circle cx="16" cy="6" r="2.5"/><path d="M4 21v-6a4 4 0 0 1 8 0v6M12 21v-6a4 4 0 0 1 8 0v6"/>',
+    old:'<circle cx="10" cy="5" r="2.5"/><path d="M10 8v6l-3 7M10 14l3 7M7 11h6l3 3v7"/>',
+    bank:'<path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/>',
+    signal:'<rect x="8" y="3" width="8" height="18" rx="3"/><circle cx="12" cy="7.5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="16.5" r="1.4"/><path d="M8 8H5M8 12H5M8 16H5M16 8h3M16 12h3M16 16h3"/>',
+    idc:'<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="2.2"/><path d="M5.5 16c.6-1.6 1.9-2.5 3.5-2.5s2.9.9 3.5 2.5M14.5 10h4M14.5 13.5h4"/>',
+    drop:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+    cross:'<path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6z"/>',
+    wheel:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 14.5V21M9.6 11.3 3.5 9.5M14.4 11.3l6.1-1.8"/>',
+    bldg:'<path d="M4 21V5l8-2v18M12 8h8v13M8 8v.01M8 12v.01M8 16v.01M16 12v.01M16 16v.01M2 21h20"/>',
+    cap:'<path d="m2 9 10-5 10 5-10 5z"/><path d="M6 11v5c3 2 9 2 12 0v-5M22 9v6"/>',
+    brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5h6v2M3 12h18"/>',
+    hammer:'<path d="m14 4 6 6-3 3-6-6zM11 7l-8 8 3 3 8-8"/>',
+    plane:'<path d="M10 14 3 12l1-2 7 1 5-7h2l-2 8 4 1 1-2h1.5l-1 4.5L21 20h-1.5l-1-2-4 1-1 7h-2v-8z"/>',
+    heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M4 18c2-1 4-1 6 0"/>',
+    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+    send:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+    chev:'<path d="m9 6 6 6-6 6"/>',
+    plus:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
+    shield:'<path d="M12 3 5 6v6c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6z"/><path d="m9 12 2 2 4-4"/>',
+  };
+  const side1=[["alert","Pendências",3],["doc","Documentos"],["list","Solicitações"],["cal","Agendamentos"],["star","Favoritos"]];
+  const side2=[["car","Motorista"],["shop","Empresário"],["grad","Estudante"],["users","Servidor Público"],["leaf","Agricultor"],["family","Mãe/Pai de família"],["old","Aposentado"]];
+  const chips=["Renovar CNH","IPVA","Segunda via de RG","Abrir empresa","Bolsa Presença","Doar sangue","Outros serviços"];
+  const dest=[
+    ["bank","#0b4fc4","Solicitar informe de rendimentos","SAEB","5 min","4,7",""],
+    ["signal","#e3212f","Consultar andamento da CNH","DETRAN","8 min","4,8",""],
+    ["signal","#e3212f","Pagar licenciamento cota única","DETRAN","10 min","4,6",""],
+    ["idc","#f08a00","Obter 1ª via da identidade nacional","DPT","15 min","4,6",""],
+    ["signal","#e3212f","Consultar licenciamento/infração","DETRAN","7 min","4,5",""],
+    ["drop","#c8102e","Agendar doação de sangue","HEMOBA","5 min","4,9","hemoba.html"],
+    ["idc","#0b4fc4","Consultar registro profissional","CONSELHOS","3 min","4,6","conselhos.html"],
+    ["cross","#178a45","Serviços de oncologia","CICAN","4 min","4,7","cican.html"],
   ];
-  return `<div class="wrap">
-    <section class="mhero"><div class="stripe" aria-hidden="true"><i></i><i></i><i></i></div>
-      <h1>Multisites ba.gov.br</h1>
-      <p>Simulação de como ficariam as páginas dos órgãos dentro do multisites, todas no mesmo padrão visual do novo ba.gov.br.</p></section>
-    <section class="sec"><div class="sechead"><div><h2>Páginas simuladas</h2><p>Clique para abrir. Os ícones e botões funcionam como numa página real.</p></div>
-      <a class="tlink ext" href="https://www.ba.gov.br/saeb" target="_blank" rel="noopener noreferrer">Ver exemplo real: SAEB</a></div>
-      <div class="sites">${sites.map(s=>`<a class="card site" href="${s.h}"><span class="ic" style="background:${s.bg}">${ic(s.ic)}</span><h3>${s.t}</h3><p>${s.d}</p><span class="go">Abrir página ${ic("arrow")}</span></a>`).join("")}</div></section>
-    <section class="sec"><div class="sechead"><div><h2>O padrão único</h2><p>O que toda página de órgão no multisites repete.</p></div></div>
-      <div class="std">
-        <div class="card"><span class="n">1</span><b>Topo do governo</b><span>Barra azul com acessibilidade (fonte e alto contraste) e cabeçalho com a logo ba.gov.br.</span></div>
-        <div class="card"><span class="n">2</span><b>Destaque do órgão</b><span>Título, frase curta e até dois botões de ação principal.</span></div>
-        <div class="card"><span class="n">3</span><b>Serviços em cartões</b><span>Ícone de traço, nome, uma linha de descrição e link para a plataforma de origem.</span></div>
-        <div class="card"><span class="n">4</span><b>Aviso e rodapé</b><span>Aviso de redirecionamento para o sistema oficial e rodapé padrão do Governo.</span></div>
-      </div></section>
+  const obj=[["wheel","Quero dirigir"],["bldg","Quero abrir uma empresa"],["cap","Quero estudar"],["brief","Quero trabalhar"],["hammer","Quero construir"],["plane","Quero viajar"],["heart","Quero receber benefícios"]];
+  const news=[["__N1__","Governo da Bahia lança programa para facilitar abertura de empresas","20 de maio de 2024"],["__N2__","Detran-BA moderniza serviços e reduz prazos em 30%","18 de maio de 2024"],["__N3__","Inscrições abertas para cursos técnicos gratuitos","15 de maio de 2024"],["__N4__","Bahia recebe novos investimentos em infraestrutura","10 de maio de 2024"]];
+  const vida=[["idc","IPVA 2024","Vencimento em 15/06/2024","Pendente","r"],["idc","CNH","Vencimento em 10/09/2024","A vencer","o"],["doc","Processo - 0001234/2024","Em análise","Em andamento","b"],["shield","Bolsa Presença","Parcela de Maio disponível","Disponível","g"]];
+  const docs=[["RG","Válido até 10/09/2031"],["CNH","Válido até 10/09/2024"],["Comprovante de residência","Emitido em 20/04/2024"],["Certidão de nascimento","Emitido em 15/03/2024"]];
+  const T = t => `data-toast="${esc(t)}"`;
+  return `<div class="home">
+    <aside class="hside" aria-label="Meu painel">
+      <a class="hs on" href="#" ${T("Meu painel: resumo do cidadão logado.")}>${sv(Q.home)}<b>Meu painel</b></a>
+      <p class="hcap">Para você</p>
+      ${side1.map(([i,t,n])=>`<a class="hs" href="#" ${T(t+": na versão real, abre a área do cidadão.")}>${sv(Q[i])}<span>${t}</span>${n?`<em>${n}</em>`:""}</a>`).join("")}
+      <p class="hcap">Serviços por perfil</p>
+      ${side2.map(([i,t])=>`<a class="hs" href="#" ${T("Perfil "+t+": serviços mais usados por esse público.")}>${sv(Q[i])}<span>${t}</span></a>`).join("")}
+      <a class="help" href="#" ${T("Govinho: assistente virtual do Governo da Bahia, atendimento 24h.")}><div><small>Precisa de ajuda?</small><b>Fale com o Govinho</b><span>Assistente Virtual Inteligente</span><i>Atendimento 24h</i></div><img src="__GOVS__" alt=""></a>
+    </aside>
+
+    <div class="hmain">
+      <section class="ghero">
+        <div class="gtxt">
+          <h1>Olá! Eu sou o <span>Govinho</span></h1>
+          <p>Seu assistente inteligente do Governo da Bahia.</p>
+          <h2>Como posso te ajudar hoje?</h2>
+          <form class="gsearch" id="gform"><label class="sr" for="gq">Pergunte ao Govinho</label>${sv(Q.search)}<input id="gq" type="search" placeholder="Ex.: Quero renovar minha CNH" autocomplete="off"><button type="submit" aria-label="Perguntar">${sv(Q.send)}</button></form>
+          <div class="gchips">${chips.map(c=>`<button type="button" class="gchip">${c}</button>`).join("")}</div>
+        </div>
+        <div class="bubble"><b>Inteligente, rápido e gente como a gente!</b><span>Aqui o atendimento tem agilidade e identidade baiana.</span></div>
+        <img class="gimg" src="__GOV__" alt="Govinho, assistente virtual do Governo da Bahia">
+      </section>
+
+      <section class="hsec"><div class="hhead"><h2>Páginas dos órgãos</h2><a href="https://www.ba.gov.br/saeb" target="_blank" rel="noopener noreferrer">Ver exemplo real: /saeb</a></div>
+        <div class="orgs">${[["conselhos.html","#0b4fc4","bank","Conselhos Regionais","Registros, certidões e débitos dos conselhos profissionais da Bahia.","/conselhos"],["hemoba.html","#c8102e","drop","Hemoba","Estoque de sangue, agendamento de doação, unidades e campanhas.","/hemoba"],["cican.html","#178a45","cross","CICAN","Centro Estadual de Oncologia: serviços, novos espaços e como acessar.","/cican"]].map(([h,c,i,t,d,u])=>`<a class="org" href="${h}"><span class="dic" style="background:${c}">${sv(Q[i])}</span><span><b>${t}</b><small>${d}</small><em>ba.gov.br${u}</em></span>${sv(Q.chev)}</a>`).join("")}</div></section>
+
+      <section class="hsec"><div class="hhead"><h2>Serviços em destaque</h2><a href="#" ${T("Catálogo completo de serviços do ba.gov.br.")}>Ver todos os serviços</a></div>
+        <div class="carw"><div class="car" id="car">${dest.map(([i,c,t,o,m,r,h])=>`<a class="dcard" href="${h||"#"}" ${h?"":T(t+" ("+o+"): na versão real, abre o serviço.")}><span class="dic" style="background:${c}">${sv(Q[i])}</span><b>${t}</b><small>${o}</small><span class="dm">${sv(Q.clock)} ${m}<em>★ ${r}</em></span></a>`).join("")}</div>
+        <button type="button" class="carbtn" id="carNext" aria-label="Mais serviços">${sv(Q.chev)}</button></div></section>
+
+      <section class="hsec"><div class="hhead"><h2>Explore por objetivo</h2></div>
+        <div class="objs">${obj.map(([i,t])=>`<a class="obj" href="#" ${T(t+": serviços agrupados por objetivo.")}>${sv(Q[i])}<span>${t}</span></a>`).join("")}</div></section>
+
+      <section class="hsec"><div class="hhead"><h2>Notícias para você</h2><a href="#" ${T("Portal de notícias do Governo da Bahia.")}>Ver todas</a></div>
+        <div class="news">${news.map(([im,t,d])=>`<a class="nw" href="#" ${T("Notícia: "+t)}><img src="${im}" alt=""><b>${t}</b><small>${d}</small></a>`).join("")}</div></section>
+    </div>
+
+    <aside class="hright">
+      <section class="rc"><div class="hhead"><h2>Minha vida pública</h2><a href="#" ${T("Minha vida pública: tudo o que o cidadão tem com o Estado.")}>Ver tudo</a></div>
+        ${vida.map(([i,t,s,b,c])=>`<a class="vp" href="#" ${T(t+": "+b+".")}><span class="vic ${c==="g"?"g":""}">${sv(Q[i])}</span><span><b>${t}</b><small>${s}</small></span><em class="bd ${c}">${b}</em></a>`).join("")}</section>
+      <section class="rc soft"><div class="hhead"><h2>Acompanhe suas solicitações</h2><a href="#" ${T("Todas as solicitações do cidadão.")}>Ver todas</a></div>
+        <div class="req"><div class="rq1"><b>RG - 1ª via</b><em class="bd g">Em produção</em></div><small>Protocolo: 123456789</small>
+          <ol class="steps"><li class="ok"><i></i>Solicitado<small>10/05</small></li><li class="ok"><i></i>Análise</li><li class="now"><i></i>Produção</li><li><i></i>Disponível</li></ol></div></section>
+      <section class="rc navy"><div class="hhead"><h2>Central de documentos</h2><a href="#" ${T("Central de documentos digitais.")}>Ver todas</a></div>
+        ${docs.map(([t,s])=>`<a class="dc" href="#" ${T(t+": documento digital.")}>${sv(Q.idc)}<span><b>${t}</b><small>${s}</small></span></a>`).join("")}
+        <a class="addoc" href="#" ${T("Adicionar documento: o cidadão envia um documento para a carteira digital.")}>Adicionar documento ${sv(Q.plus)}</a></section>
+    </aside>
   </div>`;
 }
+/* Govinho: busca e atalhos da capa */
+const GO = [[/sangue|doar|doa[cç][aã]o|hemoba/,"hemoba.html"],[/conselho|registro profissional|crea|cremeb|oab|coren/,"conselhos.html"],[/c[aâ]ncer|oncolog|cican|quimio/,"cican.html"]];
+function govinho(q){
+  const t=q.trim().toLowerCase(); if(!t){ toast("Digite o que você precisa, por exemplo: quero renovar minha CNH."); return; }
+  const hit=GO.find(([r])=>r.test(t)); if(hit){ location.href=hit[1]; return; }
+  toast(`Govinho: entendi "${q.trim()}". Na versão real, eu te levo direto para o serviço.`);
+}
+document.addEventListener("submit",e=>{ if(e.target.id==="gform"){ e.preventDefault(); govinho($("#gq").value); } });
+document.addEventListener("click",e=>{
+  const c=e.target.closest(".gchip"); if(c){ if(c.textContent==="Outros serviços"){ toast("Catálogo completo de serviços do ba.gov.br."); return; } $("#gq").value=c.textContent; govinho(c.textContent); return; }
+  if(e.target.closest("#carNext")){ const r=$("#car"); const end=r.scrollLeft+r.clientWidth>=r.scrollWidth-4; r.scrollTo({left:end?0:r.scrollLeft+r.clientWidth*0.8,behavior:"smooth"}); return; }
+  const s=e.target.closest(".hs"); if(s){ document.querySelectorAll(".hs").forEach(x=>x.classList.toggle("on",x===s)); }
+  const bl=e.target.closest("#bell"); const bm=$("#bellMenu"); if(bm){ if(bl){ bm.hidden=!bm.hidden; bl.setAttribute("aria-expanded",!bm.hidden); return; } if(!e.target.closest("#bellMenu")) bm.hidden=true; }
+});
 
 function pgConselhos(){
   return `<div class="wrap">${crumb([["Serviços","multisites.html"],["Conselhos e Registros Profissionais"]])}
