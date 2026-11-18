@@ -559,112 +559,13 @@ const SEED = {
    "ordem": 99,
    "sigla": "Órgão a definir"
   },
-  "core-ba": {
-   "atualizadoEm": "2026-10-22T13:54:36.808Z",
-   "esfera": "estadual",
-   "link": "https://corebahia.org.br/",
-   "nome": "Conselho Regional dos Representantes Comerciais no Estado da Bahia",
-   "obs": "",
-   "ordem": 8,
-   "sigla": "Core-BA"
-  },
-  "coren-ba": {
-   "atualizadoEm": "2026-10-22T13:43:46.760Z",
-   "esfera": "estadual",
-   "etapa": 0,
-   "link": "https://www.coren-ba.gov.br",
-   "nome": "Conselho Regional de Enfermagem da Bahia",
-   "obs": "",
-   "ordem": 1,
-   "sigla": "Coren-BA"
-  },
-  "cra-ba": {
-   "esfera": "estadual",
-   "link": "https://www.cra-ba.org.br",
-   "nome": "Conselho Regional de Administração da Bahia",
-   "obs": "Aparecia duas vezes na lista original (\"CRA-BA\" e \"Conselho Regional de Administração\"); unificado aqui.",
-   "ordem": 7,
-   "sigla": "CRA-BA"
-  },
-  "crc-ba": {
-   "esfera": "estadual",
-   "link": "https://www.crc-ba.org.br",
-   "nome": "Conselho Regional de Contabilidade do Estado da Bahia",
-   "obs": "",
-   "ordem": 6,
-   "sigla": "CRC-BA"
-  },
-  "crdd-ba": {
+  "conselhos": {
+   "sigla": "Conselhos Regionais",
+   "nome": "Conselhos Regionais e Registros Profissionais da Bahia",
    "esfera": "estadual",
    "link": "",
-   "nome": "Conselho Regional dos Despachantes Documentalistas",
-   "obs": "Sigla e link do site a confirmar.",
-   "ordem": 12,
-   "sigla": "Despachantes"
-  },
-  "crea-ba": {
-   "esfera": "estadual",
-   "link": "https://www.creaba.org.br",
-   "nome": "Conselho Regional de Engenharia e Agronomia da Bahia",
-   "obs": "",
-   "ordem": 2,
-   "sigla": "Crea-BA"
-  },
-  "cref13": {
-   "esfera": "estadual",
-   "link": "https://www.cref13.org.br",
-   "nome": "Conselho Regional de Educação Física da 13ª Região",
-   "obs": "",
-   "ordem": 11,
-   "sigla": "CREF13/BA"
-  },
-  "crefito-7": {
-   "esfera": "estadual",
-   "link": "https://www.crefito7.gov.br",
-   "nome": "Conselho Regional de Fisioterapia e Terapia Ocupacional da 7ª Região",
-   "obs": "",
-   "ordem": 10,
-   "sigla": "CREFITO-7"
-  },
-  "cremeb": {
-   "esfera": "estadual",
-   "link": "https://www.cremeb.org.br",
-   "nome": "Conselho Regional de Medicina do Estado da Bahia",
-   "obs": "",
-   "ordem": 3,
-   "sigla": "CREMEB-BA"
-  },
-  "crf-ba": {
-   "esfera": "estadual",
-   "link": "https://www.crf-ba.org.br",
-   "nome": "Conselho Regional de Farmácia do Estado da Bahia",
-   "obs": "",
-   "ordem": 5,
-   "sigla": "CRF-BA"
-  },
-  "cro-ba": {
-   "esfera": "estadual",
-   "link": "https://www.croba.org.br",
-   "nome": "Conselho Regional de Odontologia do Estado da Bahia",
-   "obs": "",
-   "ordem": 4,
-   "sigla": "CRO-BA"
-  },
-  "crq-7": {
-   "esfera": "estadual",
-   "link": "https://www.crq7.org.br",
-   "nome": "Conselho Regional de Química da 7ª Região",
-   "obs": "",
-   "ordem": 13,
-   "sigla": "CRQ-7"
-  },
-  "crt-ba": {
-   "esfera": "estadual",
-   "link": "",
-   "nome": "Conselho Regional dos Técnicos Industriais da Bahia",
-   "obs": "Link do site a confirmar.",
-   "ordem": 9,
-   "sigla": "CRT-BA"
+   "obs": "Os conselhos foram reunidos num órgão só: no ba.gov.br eles ficam numa página única (multisites /conselhos). Cada card é um conselho; depois entram os serviços de cada um.",
+   "ordem": 1
   },
   "detran-ba": {
    "esfera": "estadual",
@@ -681,14 +582,6 @@ const SEED = {
    "obs": "",
    "ordem": 21,
    "sigla": "JUCEB"
-  },
-  "oab-ba": {
-   "esfera": "estadual",
-   "link": "https://www.oab-ba.org.br",
-   "nome": "Ordem dos Advogados do Brasil – Seção Bahia",
-   "obs": "",
-   "ordem": 14,
-   "sigla": "OAB-BA"
   },
   "progsociais": {
    "esfera": "federal",
@@ -729,6 +622,216 @@ const SEED = {
    "nome": "Benefício de Prestação Continuada (BPC)",
    "ordem": 3,
    "orgaoId": "progsociais"
+  },
+  "cons-core-ba": {
+   "orgaoId": "conselhos",
+   "nome": "Core-BA · Conselho Regional dos Representantes Comerciais no Estado da Bahia",
+   "etapa": 0,
+   "link": "https://corebahia.org.br/",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 8,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-coren-ba": {
+   "orgaoId": "conselhos",
+   "nome": "Coren-BA · Conselho Regional de Enfermagem da Bahia",
+   "etapa": 0,
+   "link": "https://www.coren-ba.gov.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 1,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-cra-ba": {
+   "orgaoId": "conselhos",
+   "nome": "CRA-BA · Conselho Regional de Administração da Bahia",
+   "etapa": 0,
+   "link": "https://www.cra-ba.org.br",
+   "linkBa": "",
+   "obs": "Aparecia duas vezes na lista original (\"CRA-BA\" e \"Conselho Regional de Administração\"); unificado aqui.",
+   "ordem": 7,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crc-ba": {
+   "orgaoId": "conselhos",
+   "nome": "CRC-BA · Conselho Regional de Contabilidade do Estado da Bahia",
+   "etapa": 0,
+   "link": "https://www.crc-ba.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 6,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crdd-ba": {
+   "orgaoId": "conselhos",
+   "nome": "Despachantes · Conselho Regional dos Despachantes Documentalistas",
+   "etapa": 0,
+   "link": "",
+   "linkBa": "",
+   "obs": "Sigla e link do site a confirmar.",
+   "ordem": 12,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crea-ba": {
+   "orgaoId": "conselhos",
+   "nome": "Crea-BA · Conselho Regional de Engenharia e Agronomia da Bahia",
+   "etapa": 0,
+   "link": "https://www.creaba.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 2,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-cref13": {
+   "orgaoId": "conselhos",
+   "nome": "CREF13/BA · Conselho Regional de Educação Física da 13ª Região",
+   "etapa": 0,
+   "link": "https://www.cref13.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 11,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crefito-7": {
+   "orgaoId": "conselhos",
+   "nome": "CREFITO-7 · Conselho Regional de Fisioterapia e Terapia Ocupacional da 7ª Região",
+   "etapa": 0,
+   "link": "https://www.crefito7.gov.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 10,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-cremeb": {
+   "orgaoId": "conselhos",
+   "nome": "CREMEB-BA · Conselho Regional de Medicina do Estado da Bahia",
+   "etapa": 0,
+   "link": "https://www.cremeb.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 3,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crf-ba": {
+   "orgaoId": "conselhos",
+   "nome": "CRF-BA · Conselho Regional de Farmácia do Estado da Bahia",
+   "etapa": 0,
+   "link": "https://www.crf-ba.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 5,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-cro-ba": {
+   "orgaoId": "conselhos",
+   "nome": "CRO-BA · Conselho Regional de Odontologia do Estado da Bahia",
+   "etapa": 0,
+   "link": "https://www.croba.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 4,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crq-7": {
+   "orgaoId": "conselhos",
+   "nome": "CRQ-7 · Conselho Regional de Química da 7ª Região",
+   "etapa": 0,
+   "link": "https://www.crq7.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 13,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-crt-ba": {
+   "orgaoId": "conselhos",
+   "nome": "CRT-BA · Conselho Regional dos Técnicos Industriais da Bahia",
+   "etapa": 0,
+   "link": "",
+   "linkBa": "",
+   "obs": "Link do site a confirmar.",
+   "ordem": 9,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
+  },
+  "cons-oab-ba": {
+   "orgaoId": "conselhos",
+   "nome": "OAB-BA · Ordem dos Advogados do Brasil – Seção Bahia",
+   "etapa": 0,
+   "link": "https://www.oab-ba.org.br",
+   "linkBa": "",
+   "obs": "",
+   "ordem": 14,
+   "idServico": "",
+   "idEtapa": "",
+   "redmine": "",
+   "responsavel": "",
+   "previsaoSubida": "",
+   "dataConclusao": ""
   },
   "crianca-feliz": {
    "etapa": 0,
@@ -875,6 +978,7 @@ const SEED = {
  }
 };
 const ORIG_IDS = ["orgaos/coren-ba", "orgaos/crea-ba", "orgaos/cremeb", "orgaos/cro-ba", "orgaos/crf-ba", "orgaos/crc-ba", "orgaos/cra-ba", "orgaos/core-ba", "orgaos/crt-ba", "orgaos/crefito-7", "orgaos/cref13", "orgaos/crdd-ba", "orgaos/crq-7", "orgaos/oab-ba", "orgaos/progsociais", "servicos/bolsa-familia", "servicos/tarifa-social", "servicos/bpc", "servicos/scfv", "servicos/id-jovem", "servicos/crianca-feliz"]; // itens da primeira versão da lista
+const OLD_CONS = ["coren-ba","crea-ba","cremeb","cro-ba","crf-ba","crc-ba","cra-ba","core-ba","crt-ba","crefito-7","cref13","crdd-ba","crq-7","oab-ba"]; // conselhos que viraram cards dentro de "Conselhos Regionais"
 
 function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement("script"); s.src=src; s.onload=ok; s.onerror=no; document.head.appendChild(s);});}
 function rid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
@@ -889,6 +993,8 @@ function localDb(){
   if(!data.v){ Object.values(data.servicos||{}).forEach(x=>{ if(x.atualizadoEm) x.etapa=(x.etapa|0)+1; }); data.v=2; }
   // itens novos da lista base entram uma vez só (os que alguém excluiu não voltam)
   if(!data.seen) data.seen=ORIG_IDS.slice();
+  // conselhos reunidos em "Conselhos Regionais": sai o órgão antigo de cada um, se ainda não tinha serviço
+  if(!data.seen.includes("orgaos/conselhos")){ const usados=new Set(Object.values(data.servicos||{}).map(x=>x.orgaoId)); OLD_CONS.forEach(id=>{ if(!usados.has(id)) delete data.orgaos[id]; }); }
   for(const col of ["orgaos","servicos"]) for(const [id,d] of Object.entries(SEED[col])){ const k=col+"/"+id; if(!data.seen.includes(k)){ if(!data[col][id]) data[col][id]={...d}; data.seen.push(k);} }
   const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));}catch(e){toast("Não foi possível salvar no navegador.");}};
   persist();
@@ -914,6 +1020,7 @@ async function firebaseDb(cfg){
   const ref=(col,id)=>{const r=fs.collection(col).doc(id); return {id:r.id,path:col+"/"+r.id,set:d=>r.set(d),update:d=>r.update(d),delete:()=>r.delete()};};
   const meta=await fs.collection("meta").doc("seed").get();
   { const seen = meta.exists ? (meta.data().ids || ORIG_IDS) : []; const b=fs.batch(); let n=0;
+    if(meta.exists && !seen.includes("orgaos/conselhos")){ const sv=await fs.collection("servicos").get(); const usados=new Set(sv.docs.map(d=>d.data().orgaoId)); OLD_CONS.forEach(id=>{ if(!usados.has(id)){ b.delete(fs.collection("orgaos").doc(id)); n++; } }); }
     for(const col of ["orgaos","servicos"]) for(const [id,d] of Object.entries(SEED[col])){ const k=col+"/"+id; if(!seen.includes(k)){ b.set(fs.collection(col).doc(id),d); seen.push(k); n++; } }
     if(n||!meta.exists){ b.set(fs.collection("meta").doc("seed"),{em:new Date().toISOString(), ids:seen}); await b.commit(); } }
   return {kind:"firebase",
